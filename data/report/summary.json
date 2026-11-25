@@ -1,0 +1,223 @@
+{
+ "generated": "2026-11-25T21:21:49+00:00",
+ "directory_total": 53395,
+ "app_before_https": 298,
+ "new_total": 544,
+ "new_https": 488,
+ "by_source": {
+  "mp3quran": 177,
+  "radio-browser": 367
+ },
+ "by_category": {
+  "Quran": 453,
+  "Islamic talk": 64,
+  "Lectures & dawah": 16,
+  "Nasheed": 9,
+  "Mosque live": 2
+ },
+ "by_category_https": {
+  "Quran": 431,
+  "Islamic talk": 37,
+  "Lectures & dawah": 11,
+  "Nasheed": 7,
+  "Mosque live": 2
+ },
+ "by_country": {
+  "KW": {
+   "all": 200,
+   "https": 200,
+   "country": "Kuwait"
+  },
+  "--": {
+   "all": 177,
+   "https": 177,
+   "country": "Online"
+  },
+  "TR": {
+   "all": 33,
+   "https": 22,
+   "country": "Türkiye"
+  },
+  "EG": {
+   "all": 24,
+   "https": 20,
+   "country": "Egypt"
+  },
+  "ID": {
+   "all": 15,
+   "https": 11,
+   "country": "Indonesia"
+  },
+  "US": {
+   "all": 8,
+   "https": 2,
+   "country": "The United States Of America"
+  },
+  "GB": {
+   "all": 8,
+   "https": 5,
+   "country": "The United Kingdom Of Great Britain And Northern Ireland"
+  },
+  "SA": {
+   "all": 8,
+   "https": 4,
+   "country": "Saudi Arabia"
+  },
+  "LB": {
+   "all": 6,
+   "https": 5,
+   "country": "Lebanon"
+  },
+  "YE": {
+   "all": 5,
+   "https": 3,
+   "country": "Yemen"
+  },
+  "TN": {
+   "all": 5,
+   "https": 4,
+   "country": "Tunisia"
+  },
+  "ZA": {
+   "all": 4,
+   "https": 3,
+   "country": "South Africa"
+  },
+  "IQ": {
+   "all": 4,
+   "https": 3,
+   "country": "Iraq"
+  },
+  "JO": {
+   "all": 4,
+   "https": 2,
+   "country": "Jordan"
+  },
+  "AE": {
+   "all": 3,
+   "https": 3,
+   "country": "The United Arab Emirates"
+  },
+  "LY": {
+   "all": 3,
+   "https": 3,
+   "country": "Libya"
+  },
+  "DZ": {
+   "all": 3,
+   "https": 2,
+   "country": "Algeria"
+  },
+  "PK": {
+   "all": 3,
+   "https": 2,
+   "country": "Pakistan"
+  },
+  "AL": {
+   "all": 3,
+   "https": 3,
+   "country": "Albania"
+  },
+  "AF": {
+   "all": 3,
+   "https": 2,
+   "country": "Afghanistan"
+  },
+  "FR": {
+   "all": 2,
+   "https": 2,
+   "country": "France"
+  },
+  "BD": {
+   "all": 2,
+   "https": 1,
+   "country": "Bangladesh"
+  },
+  "BE": {
+   "all": 2,
+   "https": 0,
+   "country": "Belgium"
+  },
+  "MY": {
+   "all": 2,
+   "https": 0,
+   "country": "Malaysia"
+  },
+  "IN": {
+   "all": 2,
+   "https": 0,
+   "country": "India"
+  },
+  "CI": {
+   "all": 2,
+   "https": 2,
+   "country": "Coted Ivoire"
+  },
+  "BN": {
+   "all": 1,
+   "https": 0,
+   "country": "Brunei Darussalam"
+  },
+  "MA": {
+   "all": 1,
+   "https": 1,
+   "country": "Morocco"
+  },
+  "BH": {
+   "all": 1,
+   "https": 1,
+   "country": "Bahrain"
+  },
+  "AU": {
+   "all": 1,
+   "https": 0,
+   "country": "Australia"
+  },
+  "PH": {
+   "all": 1,
+   "https": 0,
+   "country": "The Philippines"
+  },
+  "BA": {
+   "all": 1,
+   "https": 0,
+   "country": "Bosnia And Herzegovina"
+  },
+  "UZ": {
+   "all": 1,
+   "https": 1,
+   "country": "Uzbekistan"
+  },
+  "OM": {
+   "all": 1,
+   "https": 1,
+   "country": "Oman"
+  },
+  "PS": {
+   "all": 1,
+   "https": 0,
+   "country": "State Of Palestine"
+  },
+  "KM": {
+   "all": 1,
+   "https": 0,
+   "country": "The Comoros"
+  },
+  "MW": {
+   "all": 1,
+   "https": 1,
+   "country": "Malawi"
+  },
+  "RU": {
+   "all": 1,
+   "https": 1,
+   "country": "The Russian Federation"
+  },
+  "TH": {
+   "all": 1,
+   "https": 1,
+   "country": "Thailand"
+  }
+ },
+ "excluded_count": 5
+}

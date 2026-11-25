@@ -1,0 +1,186 @@
+{
+"excluded": [
+{
+"name": "Al-bilad Radio/Yaqoubi",
+"cc": "IQ",
+"tags": "al-bilad radio,baghdad,iraq radio,islam,shia,البلاد",
+"why": "shia"
+},
+{
+"name": "Iran Radio English",
+"cc": "IR",
+"tags": "iranian music,islam,islamic music,quran",
+"why": "Iran"
+},
+{
+"name": "Quran Recitation by Sheikh Abdulaziz Az-Zahrani",
+"cc": "KW",
+"tags": "arabic,islam,islamic,quran,religion",
+"why": "Zahra"
+},
+{
+"name": "Voice of Islam",
+"cc": "AU",
+"tags": "islamic",
+"why": "Voice of Islam"
+},
+{
+"name": "Voice of Islam Radio",
+"cc": "GB",
+"tags": "islam,islamic,religious",
+"why": "Voice of Islam"
+}
+],
+"near_misses": [
+{
+"name": " Radiopostaja Mir - Međugorje",
+"cc": "BA",
+"tags": "catholic,christian,religious",
+"id": "60607676-de23-44cd-8e05-aecbce5332c9"
+},
+{
+"name": "Alfa & Omega Radio",
+"cc": "AL",
+"tags": "christian,gospel,religious",
+"id": "611f262c-ce41-4722-a4a2-ae7f48582032"
+},
+{
+"name": "B Web Radio",
+"cc": "ML",
+"tags": "african,african gospel,bible,christian preaching,christian-gospel,gospel,gospel music,malian,religious,worship",
+"id": "ed81c7c4-de98-4b57-8d73-54ddf167c6b6"
+},
+{
+"name": "Charity Taratil 105.7 FM",
+"cc": "LB",
+"tags": "christian,hymns,religious",
+"id": "1d2047ac-d380-4cc8-b077-ce03b2d3bbc1"
+},
+{
+"name": "Christian Mezmur Ethiopia",
+"cc": "ET",
+"tags": "christian,ethiopia,religious",
+"id": "ce7d2197-eca5-4188-b8d2-c550992160e5"
+},
+{
+"name": "Ethiopian Orthodox Church Mezmur",
+"cc": "ET",
+"tags": "orthodox,religious",
+"id": "89e889e1-124c-4c36-882b-c666ef83189b"
+},
+{
+"name": "FM 100 Pakistan Islamabad",
+"cc": "PK",
+"tags": "",
+"id": "7c4a79da-e5ad-44ea-a56a-e51634bfbef7"
+},
+{
+"name": "FM 101 Islamabad",
+"cc": "PK",
+"tags": "",
+"id": "063ba485-300c-4625-aaa0-81c5e1091ec7"
+},
+{
+"name": "Nigerian Gospel Music Radio (MP3)",
+"cc": "NG",
+"tags": "christian,gospel,gospel music,religious",
+"id": "f8d499d5-e223-4a0c-b712-2fb374628e35"
+},
+{
+"name": "Radio 1",
+"cc": "AL",
+"tags": "education,religious,talk",
+"id": "2775806b-43af-48ae-bec6-2ae0d60440c8"
+},
+{
+"name": "Radio Bir",
+"cc": "BA",
+"tags": "religion,talk",
+"id": "961228f3-0601-11e8-ae97-52543be04c81"
+},
+{
+"name": "RADIO MARIA ALBANIA",
+"cc": "AL",
+"tags": "catholic,religion",
+"id": "3524ac56-5970-11e9-a622-52543be04c81"
+},
+{
+"name": "Radio Maria Albania – Programi për Amerikën",
+"cc": "AL",
+"tags": "christian,religious,talk",
+"id": "b2852a34-8c19-4427-92ee-86c3c1c9fa45"
+},
+{
+"name": "RADIO MARIA BOSNIA",
+"cc": "BA",
+"tags": "catholic,religion",
+"id": "058490c3-5a29-11e9-a622-52543be04c81"
+},
+{
+"name": "RADIO MARIA KOSOVO",
+"cc": "XK",
+"tags": "catholic,religion",
+"id": "7b1f7dbb-5a7b-11e9-a622-52543be04c81"
+},
+{
+"name": "Radio Maria Middle East",
+"cc": "SA",
+"tags": "religious",
+"id": "76e40aad-e677-4eb5-a2a5-8fac3e51e1ae"
+},
+{
+"name": "RADIO MARIA TANZANIA",
+"cc": "TZ",
+"tags": "catholic,religion,talk",
+"id": "88083d75-5aa8-11e9-a622-52543be04c81"
+},
+{
+"name": "Radio Ngjallja",
+"cc": "AL",
+"tags": "christian,gospel,religious,talk",
+"id": "c82c8533-a3a2-4a6c-99d6-58a2f87fe236"
+},
+{
+"name": "Radio One FM 91",
+"cc": "PK",
+"tags": "islamabad,karachi,lahore,pakistan fm radio,radio one fm91",
+"id": "47efdce4-809f-4cd3-8e3c-85a2eabce1ef"
+},
+{
+"name": "Radio Pakistan Islamabad",
+"cc": "PK",
+"tags": "",
+"id": "755d2c71-1bdd-45b0-a526-02f0e4754af5"
+},
+{
+"name": "Radio Sadaye Zindagi",
+"cc": "AF",
+"tags": "christian,religious,talk",
+"id": "709784b2-cec4-4ba4-8a22-868daacad249"
+},
+{
+"name": "RADIO SALVATOR",
+"cc": "ID",
+"tags": "oldies,pop,religion",
+"id": "d68bfc9a-4394-4499-9ac6-228572b21551"
+},
+{
+"name": "RAS",
+"cc": "ID",
+"tags": "religi",
+"id": "b6be0e08-3860-4418-974a-00f7916c2550"
+},
+{
+"name": "Saint Charbel Radio",
+"cc": "LB",
+"tags": "christian,religious",
+"id": "606ef575-397a-4561-82a6-69026d10790c"
+},
+{
+"name": "Süleymanlı Haber",
+"cc": "TR",
+"tags": "dini",
+"id": "20a74f2d-775b-428e-b8a5-238a20d84156"
+}
+]
+}
