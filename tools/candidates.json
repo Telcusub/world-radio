@@ -1,0 +1,23 @@
+[
+  {"name": "Radio Rahma 91.5 FM", "countrycode": "KE", "category": "Islamic talk", "pages": ["https://radiorahma.co.ke/", "https://www.radiorahma.co.ke/live/"]},
+  {"name": "Iqra FM 95.0", "countrycode": "KE", "category": "Islamic talk", "pages": ["https://iqrafm.co.ke/", "https://www.iqrafm.co.ke/", "https://iqrafm.com/"]},
+  {"name": "Jamia Radio", "countrycode": "KE", "category": "Lectures & dawah", "pages": ["https://jamiatv.co.ke/", "https://jamiatv.co.ke/radio/"]},
+  {"name": "Radio Salaam 90.7 FM", "countrycode": "KE", "category": "Islamic talk", "pages": ["https://radiosalaam.co.ke/", "https://www.radiosalaamfm.co.ke/"]},
+  {"name": "Qurbaha Radio", "countrycode": "SO", "category": "Islamic talk", "pages": ["https://qurbaharadio.com/", "https://www.qurbaha.com/", "https://qurbaharadio.net/"]},
+  {"name": "Rahma Radio 97.3 FM Kano", "countrycode": "NG", "category": "Islamic talk", "pages": ["https://rahmaradio.com.ng/", "https://rahmaradio.com/", "https://www.rahmaradio.ng/"]},
+  {"name": "Sunna Radio", "countrycode": "NG", "category": "Lectures & dawah", "pages": ["https://sunnaradio.com/", "https://sunnaradio.com.ng/"]},
+  {"name": "Miraath Radio", "countrycode": "SA", "category": "Lectures & dawah", "pages": ["https://miraath.net/", "https://www.miraath.net/"]},
+  {"name": "Ashabulhadith Radio", "countrycode": "SA", "category": "Lectures & dawah", "pages": ["https://ashabulhadith.com/", "https://www.ashabulhadith.com/"]},
+  {"name": "Makkah Live Quran radios", "countrycode": "SA", "category": "Quran", "pages": ["https://makkahlive.net/en/radio", "https://makkahlive.net/en/radio/quran-cairo"]},
+  {"name": "Inspire FM", "countrycode": "GB", "category": "Islamic talk", "pages": ["https://inspirefm.org/", "https://www.inspirefm.co.uk/"]},
+  {"name": "Crescent Radio", "countrycode": "GB", "category": "Islamic talk", "pages": ["https://crescentradio.net/", "https://www.crescentradio.net/"]},
+  {"name": "Revive FM", "countrycode": "GB", "category": "Islamic talk", "pages": ["https://revivefm.co.uk/", "https://www.revivefm.co.uk/", "https://revivefm.com/"]},
+  {"name": "Radio Dawn", "countrycode": "GB", "category": "Islamic talk", "pages": ["https://radiodawn.co.uk/", "https://www.radiodawn.co.uk/"]},
+  {"name": "Radio Islam International", "countrycode": "ZA", "category": "Islamic talk", "pages": ["https://radioislam.org.za/", "https://www.radioislam.org.za/a/"]},
+  {"name": "Radio Al-Ansaar", "countrycode": "ZA", "category": "Islamic talk", "pages": ["https://alansaar.co.za/", "https://www.alansaar.co.za/"]},
+  {"name": "Islamic Path Radio", "countrycode": "AU", "category": "Islamic talk", "pages": ["https://islamicpath.org.au/", "https://www.islamicpathradio.com/"]},
+  {"name": "Muslim Community Radio 92.1", "countrycode": "AU", "category": "Islamic talk", "pages": ["https://mcr.org.au/", "https://www.mcr.org.au/"]},
+  {"name": "AlFalah Radio", "countrycode": "AU", "category": "Islamic talk", "pages": ["https://alfalahradio.com.au/", "https://www.alfalahradio.com/"]},
+  {"name": "Semerkand Radyo", "countrycode": "TR", "category": "Islamic talk", "pages": ["https://www.semerkandfm.com/", "https://semerkandradyo.com/"]},
+  {"name": "Radyo Selam", "countrycode": "TR", "category": "Islamic talk", "pages": ["https://radyoselam.com.tr/", "https://www.radyoselam.com/"]}
+]
