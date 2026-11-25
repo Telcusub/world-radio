@@ -257,7 +257,7 @@ def main():
         if u in urls:
             continue
         urls.add(u)
-        out.append(slim(s, kcat.get(s.get("stationuuid")) or category(text_of(s))))
+        out.append(slim(s, kcat.get(s.get("stationuuid")) or category((s.get("name") or "") + " " + (s.get("tags") or ""))))
 
     for r in mp3quran():
         u = r["url"]

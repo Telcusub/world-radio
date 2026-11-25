@@ -1,5 +1,5 @@
 {
-  "about": "Hand-picked Islamic stations for World Radio. Everything in 'add' always appears in the Islamic list. 'aka' holds other spellings for search. 'hide' takes station names or IDs to leave out of the list.",
+  "about": "Hand-picked Islamic stations for World Radio that the radio directory lacks. Everything in 'add' always appears in the Islamic list. 'aka' holds other spellings for search. 'hide' takes station names or IDs to leave out of the list. Each stream was test-played over HTTPS before it was added.",
   "add": [
     {
       "stationuuid": "aya-handasat-al-quloob",
@@ -8,12 +8,78 @@
       "about": "Sheikh Muhammad al-Maqrami · lectures",
       "url": "https://s1.reliastream.com/proxy/almaqrami?mp=/stream",
       "homepage": "https://www.m-almagrami.net/",
-      "country": "Yemen",
-      "countrycode": "YE",
-      "language": "arabic",
-      "tags": "islamic,lectures",
-      "codec": "MP3",
-      "bitrate": 96
+      "country": "Yemen", "countrycode": "YE", "language": "arabic",
+      "tags": "islamic,lectures", "codec": "MP3", "bitrate": 96, "category": "Lectures & dawah"
+    },
+    {
+      "stationuuid": "aya-jamia-radio",
+      "name": "Jamia Radio · Nairobi",
+      "aka": "Jamia Mosque Radio, Jamia TV, Masjid Jamia Nairobi, Iqra",
+      "about": "Jamia Mosque, Nairobi · Islamic education",
+      "url": "https://servidor23-3.brlogic.com:7098/live",
+      "homepage": "https://jamiatv.co.ke/",
+      "country": "Kenya", "countrycode": "KE", "language": "english",
+      "tags": "islamic,education", "category": "Islamic talk"
+    },
+    {
+      "stationuuid": "aya-ashabulhadith",
+      "name": "Ashabulhadith Radio",
+      "aka": "Ashab ul Hadith, Ashab al-Hadith, أصحاب الحديث",
+      "about": "Salafi lessons · Jeddah",
+      "url": "https://cast1.asurahosting.com/proxy/ashabulhadith/stream",
+      "homepage": "https://ashabulhadith.com/",
+      "country": "Saudi Arabia", "countrycode": "SA", "language": "arabic",
+      "tags": "islamic,lectures,salafi", "category": "Lectures & dawah"
+    },
+    {
+      "stationuuid": "aya-sunnah-radio",
+      "name": "Radio Sunna · إذاعة السنة",
+      "aka": "Sunnah Radio, Radio Sunnah, Prophetic Sunnah",
+      "about": "Prophetic Sunnah and hadith",
+      "url": "https://radiosunna.radioca.st/stream",
+      "homepage": "https://makkahlive.net/en/radio/sunnah",
+      "country": "Saudi Arabia", "countrycode": "SA", "language": "arabic",
+      "tags": "sunnah,hadith", "category": "Lectures & dawah"
+    },
+    {
+      "stationuuid": "aya-radio-islam-international",
+      "name": "Radio Islam International",
+      "aka": "Radio Islam 1548 AM, Radio Islam South Africa, Radio Islam Johannesburg, Lenasia",
+      "about": "Johannesburg Muslim community radio",
+      "url": "https://cast1.my-control-panel.com/proxy/netmoham/radioislam.mp3",
+      "homepage": "https://radioislam.org.za/",
+      "country": "South Africa", "countrycode": "ZA", "language": "english",
+      "tags": "islamic,community,talk", "category": "Islamic talk"
+    },
+    {
+      "stationuuid": "aya-2mfm",
+      "name": "Muslim Community Radio 2MFM 92.1",
+      "aka": "2MFM, MCR Sydney, Muslim Radio Sydney",
+      "about": "Sydney Muslim community radio · Arabic and English",
+      "url": "https://live.2mfm.org.au/",
+      "homepage": "https://2mfm.org.au/",
+      "country": "Australia", "countrycode": "AU", "language": "arabic",
+      "tags": "islamic,community", "category": "Islamic talk"
+    },
+    {
+      "stationuuid": "aya-inspire-fm",
+      "name": "Inspire FM · Luton",
+      "aka": "Inspire FM 105.8, Inspire Radio Luton",
+      "about": "Luton Muslim community radio",
+      "url": "https://listen-inspirefm.sharp-stream.com/inspirefm.mp3",
+      "homepage": "https://inspirefm.org/",
+      "country": "United Kingdom", "countrycode": "GB", "language": "english",
+      "tags": "islamic,community", "category": "Islamic talk"
+    },
+    {
+      "stationuuid": "aya-crescent-radio",
+      "name": "Crescent Radio · Rochdale",
+      "aka": "Crescent Radio 97.2, Crescent Community Radio",
+      "about": "Rochdale Muslim community radio",
+      "url": "https://radio.canstream.co.uk:8152/live.mp3",
+      "homepage": "https://crescentradio.net/",
+      "country": "United Kingdom", "countrycode": "GB", "language": "english",
+      "tags": "islamic,community", "category": "Islamic talk"
     }
   ],
   "hide": []

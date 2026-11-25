@@ -6,6 +6,7 @@ Open the app: https://telcusub.github.io/world-radio/
 
 - Search by name, country, language or genre
 - Islamic tab: Sunni Quran, Islamic talk and nasheed stations, A to Z, with Star all (open directly with #islamic)
+- The Islamic list is built daily by `.github/workflows/islamic.yml` (`tools/build_islamic.py`): every Sunni Islamic station in the Radio Browser directory plus mp3quran.net Quran radios, sorted into Quran, Lectures & dawah, Nasheed, Mosque live and Islamic talk. Report: `data/report/summary.json`
 - Hand-picked stations live in `islamic-extra.json` and always show in the Islamic list; `aka` adds other spellings for search
 - "Add to Islamic list" under the dial adds or removes the playing station on your own device
 - Reconnects by itself if a stream drops, and moves to the next station if one is off air

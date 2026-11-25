@@ -109,7 +109,9 @@ select{-webkit-appearance:none;appearance:none;padding-right:36px;background-ima
 .tab svg{display:inline-block;vertical-align:-2px;margin-right:5px}
 .tab.isl[aria-selected=true]{color:var(--red)}
 .islbar{display:flex;gap:8px}
-#isl .hint{margin-top:8px}
+#isl .hint{margin-top:4px}
+.irow{margin-top:10px;max-width:360px}.irow label{display:grid;gap:4px;font-size:13px;font-weight:600;color:var(--mute)}
+#icats{padding-top:10px}
 .foot{margin:26px 0 0;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--mute);max-width:70ch}
 
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px max(4vw,12px) calc(10px + env(safe-area-inset-bottom));background:var(--red);color:#fff;box-shadow:0 -8px 26px rgb(0 0 0/.22);transform:translateY(115%);transition:transform .25s ease}
@@ -199,7 +201,9 @@ select{-webkit-appearance:none;appearance:none;padding-right:36px;background-ima
    <input type="search" id="iq" placeholder="Filter by name, country or language" autocomplete="off" enterkeyhint="search" aria-label="Filter Islamic stations">
    <button class="btn" id="starAll" type="button">Star all</button>
   </div>
-  <p class="hint">Quran, Islamic talk and nasheed stations from the directory, A to Z. The directory doesn't say which tradition a station follows, so stations marked Shia or Ahmadi, and stations from Iran, are left out. Missing one? Play it from Explore, then tap “Add to Islamic list” under the dial.</p>
+  <div class="irow"><label>Country<select id="icc"><option value="">All countries</option></select></label></div>
+  <div class="chips" id="icats" aria-label="Categories"></div>
+  <p class="hint">Every Sunni Islamic station in the free radio directory, plus hand-picked ones and Quran reciter radios, A to Z, refreshed daily. The directory doesn't say which tradition a station follows, so stations marked Shia or Ahmadi, and stations from Iran, are left out. Missing one? Play it from Explore, then tap “Add to Islamic list” under the dial.</p>
  </section>
  <p class="count" id="count" aria-live="polite">Tuning in…</p>
  <ul class="list" id="list"></ul>
