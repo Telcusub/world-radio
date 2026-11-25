@@ -37,15 +37,15 @@ INC = re.compile("|".join([
     "قرآن", "القران", "اسلام", "إسلام", "اسلامی", "السلف", "دار الحديث", "السنة النبوية",
     "أهل السنة", "اهل السنة", "الإيمان", "الايمان", "الشيخ", "تلاوة", "تلاوات", "تفسير", "دعوة",
     "التوحيد", "فتاوى", "مصحف", "الأذان", "رقية", "ابن القيم", "ابن باز", "ابن عثيمين", "الألباني",
-    "الهدى", "الفرقان", "أناشيد", "اناشيد", "مسجد", "الحرم",
+    "الهدى", "الفرقان", "أناشيد", "اناشيد", "مسجد", "الحرم", "القارئ", "ابن أبي زيد", r"\bdiyanet\b", r"\bikim\b",
 ]), re.I)
 
 EXC = re.compile("|".join([
     r"shi'?a\b", r"\bshia", r"shiite|shi'ite", r"ahl.?(?:ul|e|al).?ba[iy]t",
     r"hussain|husain|hussein|husayn|hossein", r"karbala|kerbala", r"ashura", r"\bnoha|nauha",
-    r"marsiya", r"zahra", r"imam.?(?:ali|reza|riza|husain|mahdi|zaman)", r"mahdi", r"ahmadi",
+    r"marsiya", r"\bzahra\b", r"imam.?(?:ali|reza|riza|husain|mahdi|zaman)", r"mahdi", r"ahmadi",
     r"\bmta\b", r"alislam\.org", r"voice of islam", r"al.?kawthar", r"ja'?fari", r"twelver",
-    r"najaf", r"sistani", r"kadhim",
+    r"najaf", r"sistani", r"kadhim", r"gospel|christian|catholic|\bbible|\bchurch", r"magomaev|магомаев", r"radio asian air", r"fm 100 pakistan",
     "عاشوراء", "الحسين", "كربلاء", "أهل البيت", "اهل البيت", "شيعة", "الشيعة", "الكوثر", "العتبة",
     "السيستاني", "المرجعية", "النجف", "الكاظم", "الزهراء", "الأحمدية", "الاحمدية",
 ]), re.I)
@@ -67,6 +67,38 @@ OLD_RX = re.compile("|".join([
     "قرآن", "القران", "اسلام", "إسلام", "اسلامی", "السلف", "دار الحديث", "السنة النبوية", "أهل السنة", "اهل السنة", "الإيمان", "الايمان", "الشيخ", "تلاوة", "تلاوات", "تفسير", "دعوة", "التوحيد", "فتاوى", "مصحف", "الأذان", "رقية", "ابن القيم", "ابن باز", "ابن عثيمين", "الألباني", "الهدى", "الفرقان",
 ]), re.I)
 OLD_EXC = re.compile(r"shi'?a\b|shia|shiite|shi'ite|ahl.?(?:ul|e|al).?ba[iy]t|hussain|husain|hussein|husayn|hossein|karbala|ashura|noha|nauha|marsiya|zahra|imam.?(?:ali|reza|riza|husain|mahdi)|mahdi|ahmadi|al.?kawthar|ja'?fari|twelver|عاشوراء|الحسين|كربلاء|أهل البيت|اهل البيت|شيعة|الكوثر", re.I)
+
+# Known Sunni Islamic stations, found by name. The report says which ones the directory lacks.
+KNOWN = [
+    (r"rodja", "ID", "Lectures & dawah"), (r"\bmq ?fm\b", "ID", "Islamic talk"), (r"\bhang ?(?:106|fm)\b|hang106", "ID", "Lectures & dawah"),
+    (r"\bfajri\b", "ID", "Islamic talk"), (r"\bradio bir\b", "BA", "Islamic talk"), (r"\bikim ?fm\b", "MY", "Islamic talk"),
+    (r"^zayan$", "MY", "Islamic talk"), (r"\berkam\b", "TR", "Islamic talk"), (r"lalegül|lalegul", "TR", "Islamic talk"),
+    (r"\bvav radyo\b", "TR", "Islamic talk"), (r"\bsemerkand\b", "TR", "Islamic talk"), (r"\bal.?fayda\b", "SN", "Islamic talk"),
+    (r"revive ?fm", "GB", "Islamic talk"), (r"inspire ?fm", "GB", "Islamic talk"), (r"\bunity ?fm\b", "GB", "Islamic talk"),
+    (r"crescent radio", "GB", "Islamic talk"), (r"radio dawn", "GB", "Islamic talk"), (r"salaam radio", "GB", "Islamic talk"),
+    (r"radio salam manchester", "GB", "Islamic talk"), (r"voice of the cape|^voc$", "ZA", "Islamic talk"), (r"radio islam", "ZA", "Islamic talk"),
+    (r"al.?ansaar", "ZA", "Islamic talk"), (r"channel islam", None, "Islamic talk"), (r"markaz sahaba", "ZA", "Lectures & dawah"),
+    (r"radio rahma", "KE", "Islamic talk"), (r"iqra fm", "KE", "Islamic talk"), (r"radio salaam", "KE", "Islamic talk"), (r"jamia radio", "KE", "Islamic talk"),
+    (r"rahma radio", "NG", "Islamic talk"), (r"sunna radio", "NG", "Lectures & dawah"), (r"qurbaha", "SO", "Islamic talk"),
+    (r"ashab ?ul ?hadith", None, "Lectures & dawah"), (r"miraath", None, "Lectures & dawah"), (r"nida.?al.?islam|نداء الإسلام", "SA", "Islamic talk"),
+    (r"\bpeace ?radio\b|\bradio peace\b", "IN", "Islamic talk"), (r"muslim community radio", "AU", "Islamic talk"), (r"alfalah radio", "AU", "Islamic talk"),
+    (r"islamic path", "AU", "Islamic talk"), (r"mouslim ?radio", None, "Islamic talk"), (r"radio bilal", "UG", "Islamic talk"), (r"zango fm", "US", "Islamic talk"),
+    (r"radyo selam", "TR", "Islamic talk"), (r"kawand", "SN", "Islamic talk"), (r"ummah radio", None, "Islamic talk"), (r"radio islamico", None, "Islamic talk"),
+    (r"yaqeen radio", None, "Islamic talk"), (r"islamic radio of canada", "CA", "Islamic talk"), (r"radio islam global", None, "Islamic talk"),
+    (r"sampfatis", None, "Islamic talk"), (r"islamic lectures centre", None, "Lectures & dawah"), (r"majelis rasulullah", None, "Islamic talk"),
+    (r"kishk|كشك", None, "Lectures & dawah"), (r"sha.?rawi|شعراوي", None, "Lectures & dawah"), (r"abdel ?kafi|عبد الكافي", None, "Lectures & dawah"),
+    (r"quran for the heart|القرآن للقلب", None, "Quran"),
+]
+KNOWN_RX = [(re.compile(p, re.I), cc, cat) for p, cc, cat in KNOWN]
+
+
+def known(s):
+    name, cc = (s.get("name") or "").strip(), (s.get("countrycode") or "").upper()
+    for rx, kcc, cat in KNOWN_RX:
+        if rx.search(name) and (kcc is None or kcc == cc):
+            return rx.pattern, cat
+    return None
+
 
 MUSLIM_CC = set("AF AL AE AZ BA BD BF BH BN DJ DZ EG ER ET GM GN ID IQ JO KE KG KM KW KZ LB LY MA MR ML MV MY NE NG OM PK PS QA SA SD SL SN SO SY TD TJ TM TN TR TZ UZ XK YE".split())
 
@@ -194,11 +226,15 @@ def main():
               "directory_total": len(stations)}
     report["app_before_https"] = old_app_count(stations)
 
-    keep, excluded, near = {}, [], []
+    keep, excluded, near, known_hits, kcat = {}, [], [], {}, {}
     for s in stations:
         txt = text_of(s)
         cc = (s.get("countrycode") or "").upper()
-        if not INC.search(txt):
+        kn = known(s)
+        if kn:
+            known_hits.setdefault(kn[0], []).append(s.get("name"))
+        tr_dini = cc == "TR" and re.search(r"\bdini\b", s.get("tags") or "", re.I)
+        if not (kn or tr_dini or INC.search(txt)):
             if cc in MUSLIM_CC and re.search(r"relig|islam|dini|diin|ديني|دينية", txt, re.I):
                 near.append({"name": s.get("name"), "cc": cc, "tags": s.get("tags"), "id": s.get("stationuuid")})
             continue
@@ -208,6 +244,8 @@ def main():
         u = url_of(s)
         if not u:
             continue
+        if kn:
+            kcat[s.get("stationuuid")] = kn[1]
         k = sort_key(s.get("name")) + "|" + cc
         old = keep.get(k)
         if old is None or (s.get("clickcount") or 0) > (old.get("clickcount") or 0):
@@ -219,7 +257,7 @@ def main():
         if u in urls:
             continue
         urls.add(u)
-        out.append(slim(s, category(text_of(s))))
+        out.append(slim(s, kcat.get(s.get("stationuuid")) or category(text_of(s))))
 
     for r in mp3quran():
         u = r["url"]
@@ -255,6 +293,8 @@ def main():
         c["country"] = c["country"] or s.get("country", "")
     report["by_country"] = dict(sorted(by_cc.items(), key=lambda kv: -kv[1]["all"]))
     report["excluded_count"] = len(excluded)
+    report["known_found"] = {p: n[:3] for p, n in known_hits.items()}
+    report["known_missing"] = [p for p, cc, cat in KNOWN if p not in known_hits]
 
     if os.environ.get("GITHUB_EVENT_NAME") != "schedule":
         with open(os.path.join(OUT, "report", "summary.json"), "w", encoding="utf-8") as f:
