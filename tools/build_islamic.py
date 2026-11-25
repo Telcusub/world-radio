@@ -167,10 +167,12 @@ def sort_key(name):
     return re.sub(r"^[\W\d_]+", "", name or "", flags=re.U).casefold() or (name or "").casefold()
 
 
-def category(txt):
-    for name, rx in CATS:
-        if rx.search(txt):
-            return name
+def category(name, tags=""):
+    """The station's name decides first; its tags only when the name says nothing."""
+    for txt in (name, tags):
+        for cat, rx in CATS:
+            if rx.search(txt or ""):
+                return cat
     return "Islamic talk"
 
 
@@ -257,7 +259,7 @@ def main():
         if u in urls:
             continue
         urls.add(u)
-        out.append(slim(s, kcat.get(s.get("stationuuid")) or category((s.get("name") or "") + " " + (s.get("tags") or ""))))
+        out.append(slim(s, kcat.get(s.get("stationuuid")) or category(s.get("name"), s.get("tags"))))
 
     for r in mp3quran():
         u = r["url"]
