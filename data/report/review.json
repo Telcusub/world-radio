@@ -7,16 +7,28 @@
 "why": "shia"
 },
 {
+"name": "FM 100 Pakistan",
+"cc": "PK",
+"tags": "folk,islamic,talk",
+"why": "FM 100 Pakistan"
+},
+{
 "name": "Iran Radio English",
 "cc": "IR",
 "tags": "iranian music,islam,islamic music,quran",
 "why": "Iran"
 },
 {
-"name": "Quran Recitation by Sheikh Abdulaziz Az-Zahrani",
-"cc": "KW",
-"tags": "arabic,islam,islamic,quran,religion",
-"why": "Zahra"
+"name": "Radio Asian Air",
+"cc": "GB",
+"tags": "bollywood,islamic,lollywood",
+"why": "Radio Asian Air"
+},
+{
+"name": "Radio Thesaret",
+"cc": "AL",
+"tags": "gospel,islamic,religious",
+"why": "gospel"
 },
 {
 "name": "Voice of Islam",
@@ -29,6 +41,12 @@
 "cc": "GB",
 "tags": "islam,islamic,religious",
 "why": "Voice of Islam"
+},
+{
+"name": "Муслим Магомаев",
+"cc": "RU",
+"tags": "discography",
+"why": "Магомаев"
 }
 ],
 "near_misses": [
@@ -91,12 +109,6 @@
 "cc": "AL",
 "tags": "education,religious,talk",
 "id": "2775806b-43af-48ae-bec6-2ae0d60440c8"
-},
-{
-"name": "Radio Bir",
-"cc": "BA",
-"tags": "religion,talk",
-"id": "961228f3-0601-11e8-ae97-52543be04c81"
 },
 {
 "name": "RADIO MARIA ALBANIA",
@@ -175,12 +187,6 @@
 "cc": "LB",
 "tags": "christian,religious",
 "id": "606ef575-397a-4561-82a6-69026d10790c"
-},
-{
-"name": "Süleymanlı Haber",
-"cc": "TR",
-"tags": "dini",
-"id": "20a74f2d-775b-428e-b8a5-238a20d84156"
 }
 ]
 }

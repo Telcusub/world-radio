@@ -1,31 +1,31 @@
 {
- "generated": "2026-11-25T21:21:49+00:00",
+ "generated": "2026-11-25T21:24:51+00:00",
  "directory_total": 53395,
  "app_before_https": 298,
- "new_total": 544,
- "new_https": 488,
+ "new_total": 565,
+ "new_https": 506,
  "by_source": {
   "mp3quran": 177,
-  "radio-browser": 367
+  "radio-browser": 388
  },
  "by_category": {
-  "Quran": 453,
-  "Islamic talk": 64,
-  "Lectures & dawah": 16,
+  "Quran": 452,
+  "Islamic talk": 78,
+  "Lectures & dawah": 24,
   "Nasheed": 9,
   "Mosque live": 2
  },
  "by_category_https": {
   "Quran": 431,
-  "Islamic talk": 37,
-  "Lectures & dawah": 11,
+  "Islamic talk": 50,
+  "Lectures & dawah": 16,
   "Nasheed": 7,
   "Mosque live": 2
  },
  "by_country": {
   "KW": {
-   "all": 200,
-   "https": 200,
+   "all": 201,
+   "https": 201,
    "country": "Kuwait"
   },
   "--": {
@@ -34,8 +34,8 @@
    "country": "Online"
   },
   "TR": {
-   "all": 33,
-   "https": 22,
+   "all": 39,
+   "https": 28,
    "country": "Türkiye"
   },
   "EG": {
@@ -44,24 +44,24 @@
    "country": "Egypt"
   },
   "ID": {
-   "all": 15,
-   "https": 11,
+   "all": 24,
+   "https": 17,
    "country": "Indonesia"
   },
+  "SA": {
+   "all": 10,
+   "https": 6,
+   "country": "Saudi Arabia"
+  },
   "US": {
-   "all": 8,
-   "https": 2,
+   "all": 9,
+   "https": 3,
    "country": "The United States Of America"
   },
   "GB": {
    "all": 8,
    "https": 5,
    "country": "The United Kingdom Of Great Britain And Northern Ireland"
-  },
-  "SA": {
-   "all": 8,
-   "https": 4,
-   "country": "Saudi Arabia"
   },
   "LB": {
    "all": 6,
@@ -93,6 +93,11 @@
    "https": 2,
    "country": "Jordan"
   },
+  "MY": {
+   "all": 4,
+   "https": 2,
+   "country": "Malaysia"
+  },
   "AE": {
    "all": 3,
    "https": 3,
@@ -108,15 +113,10 @@
    "https": 2,
    "country": "Algeria"
   },
-  "PK": {
+  "IN": {
    "all": 3,
-   "https": 2,
-   "country": "Pakistan"
-  },
-  "AL": {
-   "all": 3,
-   "https": 3,
-   "country": "Albania"
+   "https": 1,
+   "country": "India"
   },
   "AF": {
    "all": 3,
@@ -138,15 +138,20 @@
    "https": 0,
    "country": "Belgium"
   },
-  "MY": {
+  "BA": {
    "all": 2,
    "https": 0,
-   "country": "Malaysia"
+   "country": "Bosnia And Herzegovina"
   },
-  "IN": {
+  "PK": {
    "all": 2,
-   "https": 0,
-   "country": "India"
+   "https": 2,
+   "country": "Pakistan"
+  },
+  "AL": {
+   "all": 2,
+   "https": 2,
+   "country": "Albania"
   },
   "CI": {
    "all": 2,
@@ -178,11 +183,6 @@
    "https": 0,
    "country": "The Philippines"
   },
-  "BA": {
-   "all": 1,
-   "https": 0,
-   "country": "Bosnia And Herzegovina"
-  },
   "UZ": {
    "all": 1,
    "https": 1,
@@ -198,6 +198,11 @@
    "https": 0,
    "country": "State Of Palestine"
   },
+  "SN": {
+   "all": 1,
+   "https": 1,
+   "country": "Senegal"
+  },
   "KM": {
    "all": 1,
    "https": 0,
@@ -208,16 +213,113 @@
    "https": 1,
    "country": "Malawi"
   },
-  "RU": {
-   "all": 1,
-   "https": 1,
-   "country": "The Russian Federation"
-  },
   "TH": {
    "all": 1,
    "https": 1,
    "country": "Thailand"
   }
  },
- "excluded_count": 5
+ "excluded_count": 8,
+ "known_found": {
+  "\\bmq ?fm\\b": [
+   "102.7 MQFM Bandung"
+  ],
+  "channel islam": [
+   "Channel Islam International"
+  ],
+  "\\berkam\\b": [
+   "Erkam Radyo",
+   "Erkam Radyo 2nd Stream"
+  ],
+  "\\bfajri\\b": [
+   "Fajri FM"
+  ],
+  "\\bhang ?(?:106|fm)\\b|hang106": [
+   "Hang 106 FM",
+   "Hang FM",
+   "HANG106FM"
+  ],
+  "\\bikim ?fm\\b": [
+   "IKIMfm"
+  ],
+  "lalegül|lalegul": [
+   "LALEGÜL FM"
+  ],
+  "\\bpeace ?radio\\b|\\bradio peace\\b": [
+   "Peace Radio",
+   "PeaceRadio",
+   "PeaceRadio Quran"
+  ],
+  "\\bal.?fayda\\b": [
+   "Radio Al Fayda 90.1 Kaolack"
+  ],
+  "\\bradio bir\\b": [
+   "Radio Bir"
+  ],
+  "rodja": [
+   "Radio Rodja 756 AM",
+   "Radio Rodja 756 AM ",
+   "Radio Rodja 756 AM & 100.1 FM"
+  ],
+  "zango fm": [
+   "Radio Zango FM"
+  ],
+  "salaam radio": [
+   "Salaam Radio"
+  ],
+  "sha.?rawi|شعراوي": [
+   "Tafsir by Al-Sha'rawi"
+  ],
+  "\\bunity ?fm\\b": [
+   "Unity FM"
+  ],
+  "\\bvav radyo\\b": [
+   "Vav Radyo"
+  ],
+  "voice of the cape|^voc$": [
+   "VOC"
+  ],
+  "^zayan$": [
+   "Zayan"
+  ]
+ },
+ "known_missing": [
+  "\\bsemerkand\\b",
+  "revive ?fm",
+  "inspire ?fm",
+  "crescent radio",
+  "radio dawn",
+  "radio salam manchester",
+  "radio islam",
+  "al.?ansaar",
+  "markaz sahaba",
+  "radio rahma",
+  "iqra fm",
+  "radio salaam",
+  "jamia radio",
+  "rahma radio",
+  "sunna radio",
+  "qurbaha",
+  "ashab ?ul ?hadith",
+  "miraath",
+  "nida.?al.?islam|نداء الإسلام",
+  "muslim community radio",
+  "alfalah radio",
+  "islamic path",
+  "mouslim ?radio",
+  "radio bilal",
+  "radyo selam",
+  "kawand",
+  "ummah radio",
+  "radio islamico",
+  "yaqeen radio",
+  "islamic radio of canada",
+  "radio islam global",
+  "sampfatis",
+  "islamic lectures centre",
+  "majelis rasulullah",
+  "kishk|كشك",
+  "abdel ?kafi|عبد الكافي",
+  "quran for the heart|القرآن للقلب"
+ ]
 }
