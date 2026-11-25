@@ -73,6 +73,13 @@ def same_site_live_links(html, base):
 
 def search_station(c):
     tried, streams, notes = set(), [], []
+    for u in c.get("streams", []):
+        tried.add(u)
+        ok, ctype, f = probe(u)
+        if ok:
+            streams.append({"url": f, "type": ctype, "https": f.lower().startswith("https://"), "found_on": "direct test"})
+        else:
+            notes.append(f"{u}: {ctype}")
     pages = list(c.get("pages", []))
     for depth in (0, 1):
         nxt = []
