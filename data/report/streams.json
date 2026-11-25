@@ -1,0 +1,239 @@
+{
+ "candidates": [
+  {
+   "name": "Radio Rahma 91.5 FM",
+   "countrycode": "KE",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://radiorahma.co.ke/: URLError",
+    "https://www.radiorahma.co.ke/live/: URLError"
+   ]
+  },
+  {
+   "name": "Iqra FM 95.0",
+   "countrycode": "KE",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://iqrafm.co.ke/: HTTPError",
+    "https://www.iqrafm.co.ke/: HTTPError",
+    "https://iqrafm.com/: URLError"
+   ]
+  },
+  {
+   "name": "Jamia Radio",
+   "countrycode": "KE",
+   "category": "Lectures & dawah",
+   "streams": [
+    {
+     "url": "https://servidor23-3.brlogic.com:7098/live",
+     "type": "audio/mpeg",
+     "https": true,
+     "found_on": "https://jamiatv.co.ke/"
+    }
+   ],
+   "notes": []
+  },
+  {
+   "name": "Radio Salaam 90.7 FM",
+   "countrycode": "KE",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://radiosalaam.co.ke/: URLError",
+    "https://www.radiosalaamfm.co.ke/: URLError"
+   ]
+  },
+  {
+   "name": "Qurbaha Radio",
+   "countrycode": "SO",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://qurbaharadio.com/: URLError",
+    "https://qurbaharadio.net/: URLError"
+   ]
+  },
+  {
+   "name": "Rahma Radio 97.3 FM Kano",
+   "countrycode": "NG",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://rahmaradio.com.ng/: URLError",
+    "https://rahmaradio.com/: URLError",
+    "https://www.rahmaradio.ng/: URLError"
+   ]
+  },
+  {
+   "name": "Sunna Radio",
+   "countrycode": "NG",
+   "category": "Lectures & dawah",
+   "streams": [],
+   "notes": [
+    "https://sunnaradio.com/: URLError",
+    "https://sunnaradio.com.ng/: URLError"
+   ]
+  },
+  {
+   "name": "Miraath Radio",
+   "countrycode": "SA",
+   "category": "Lectures & dawah",
+   "streams": [],
+   "notes": []
+  },
+  {
+   "name": "Ashabulhadith Radio",
+   "countrycode": "SA",
+   "category": "Lectures & dawah",
+   "streams": [
+    {
+     "url": "https://cast1.asurahosting.com/proxy/ashabulhadith/stream",
+     "type": "audio/mpeg",
+     "https": true,
+     "found_on": "https://ashabulhadith.com/"
+    }
+   ],
+   "notes": []
+  },
+  {
+   "name": "Makkah Live Quran radios",
+   "countrycode": "SA",
+   "category": "Quran",
+   "streams": [
+    {
+     "url": "http://n0d.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohSkzQMAZctANbqnfvdG0g",
+     "type": "audio/mpeg",
+     "https": false,
+     "found_on": "https://makkahlive.net/en/radio/quran-cairo"
+    }
+   ],
+   "notes": []
+  },
+  {
+   "name": "Inspire FM",
+   "countrycode": "GB",
+   "category": "Islamic talk",
+   "streams": [
+    {
+     "url": "https://listen-inspirefm.sharp-stream.com/inspirefm.mp3",
+     "type": "audio/mpeg",
+     "https": true,
+     "found_on": "https://inspirefm.org/"
+    }
+   ],
+   "notes": [
+    "https://www.inspirefm.co.uk/: URLError"
+   ]
+  },
+  {
+   "name": "Crescent Radio",
+   "countrycode": "GB",
+   "category": "Islamic talk",
+   "streams": [
+    {
+     "url": "https://radio.canstream.co.uk:8152/live.mp3",
+     "type": "audio/mpeg",
+     "https": true,
+     "found_on": "https://crescentradio.net/"
+    }
+   ],
+   "notes": []
+  },
+  {
+   "name": "Revive FM",
+   "countrycode": "GB",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://revivefm.com/: HTTPError"
+   ]
+  },
+  {
+   "name": "Radio Dawn",
+   "countrycode": "GB",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://radiodawn.co.uk/: URLError",
+    "https://www.radiodawn.co.uk/: URLError"
+   ]
+  },
+  {
+   "name": "Radio Islam International",
+   "countrycode": "ZA",
+   "category": "Islamic talk",
+   "streams": [
+    {
+     "url": "http://cast1.my-control-panel.com/proxy/netmoham/radioislam.mp3",
+     "type": "audio/mpeg",
+     "https": false,
+     "found_on": "https://radioislam.org.za/"
+    }
+   ],
+   "notes": []
+  },
+  {
+   "name": "Radio Al-Ansaar",
+   "countrycode": "ZA",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": []
+  },
+  {
+   "name": "Islamic Path Radio",
+   "countrycode": "AU",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://islamicpath.org.au/: URLError",
+    "https://www.islamicpathradio.com/: URLError"
+   ]
+  },
+  {
+   "name": "Muslim Community Radio 92.1",
+   "countrycode": "AU",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": []
+  },
+  {
+   "name": "AlFalah Radio",
+   "countrycode": "AU",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://www.alfalahradio.com/: HTTPError"
+   ]
+  },
+  {
+   "name": "Semerkand Radyo",
+   "countrycode": "TR",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://www.semerkandfm.com/: URLError",
+    "https://semerkandradyo.com/: URLError"
+   ]
+  },
+  {
+   "name": "Radyo Selam",
+   "countrycode": "TR",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://radyoselam.com.tr/: URLError",
+    "https://www.radyoselam.com/: URLError"
+   ]
+  }
+ ],
+ "extra_checks": [
+  {
+   "name": "Handasat al-Quloob · هندسة القلوب",
+   "url": "https://s1.reliastream.com/proxy/almaqrami?mp=/stream",
+   "ok": true,
+   "type": "audio/mpeg"
+  }
+ ]
+}
