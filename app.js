@@ -200,11 +200,20 @@ au.addEventListener('playing',()=>{S.tries=0;setStatus('Live','live');paint()});
 au.addEventListener('waiting',()=>{if(S.want&&!pending)setStatus('Buffering…','wait')});
 au.addEventListener('error',()=>{if(!switching&&au.getAttribute('src'))fail()});
 au.addEventListener('ended',()=>{if(S.want)fail()});
-au.addEventListener('pause',()=>{if(!switching&&!pending&&S.want&&!au.ended&&!au.error){S.want=false;setStatus('Paused','idle');paint()}});
+au.addEventListener('pause',()=>{if(!switching&&!pending&&S.want&&!au.ended&&!au.error){
+ S.want=false;
+ if(document.hidden&&$('#resume').checked){resumeAfter=true;setStatus('Paused by another app · resumes when you come back','idle')}
+ else setStatus('Paused','idle');
+ paint()}});
+/* Another app (video, call, voice note) took the sound while World Radio was in the background:
+   phones don't let a web page restart sound from the background, so pick up as soon as you're back. */
+let resumeAfter=false;
+function comeBack(){if(document.hidden||!resumeAfter||!S.cur||S.want)return;resumeAfter=false;S.want=true;S.tries=0;pending=false;paint();start()}
+document.addEventListener('visibilitychange',comeBack);window.addEventListener('focus',comeBack);window.addEventListener('pageshow',comeBack);
 setInterval(()=>{if(!S.want||switching||pending)return;const t=au.currentTime;if(!au.paused&&t>lastT+.05){lastT=t;stuck=0;return}if(++stuck>=4){stuck=0;fail()}},4000);
 
 function play(s,q,i){
- S.cur=s;S.queue=q&&q.length?q:[s];S.idx=i??S.queue.findIndex(x=>x.stationuuid===s.stationuuid);S.want=true;S.tries=0;pending=false;
+ resumeAfter=false;S.cur=s;S.queue=q&&q.length?q:[s];S.idx=i??S.queue.findIndex(x=>x.stationuuid===s.stationuuid);S.want=true;S.tries=0;pending=false;
  recent=[slim(s),...recent.filter(x=>x.stationuuid!==s.stationuuid)].slice(0,50);store.set('recent',recent);store.set('last',slim(s));
  api('url/'+encodeURIComponent(s.stationuuid)).catch(()=>{});
  paint();start();
@@ -213,6 +222,7 @@ function play(s,q,i){
 }
 function step(d){const q=S.queue;if(!S.cur||!q.length)return toggle();const i=((S.idx<0?0:S.idx)+d+q.length)%q.length;play(q[i],q,i)}
 function toggle(){
+ resumeAfter=false;
  if(!S.cur){const r=rows();return r.length?play(r[0],r,0):surprise()}
  if(S.want){stop();setStatus('Paused','idle')}else{S.want=true;S.tries=0;pending=false;paint();start()}
 }
@@ -259,9 +269,9 @@ function paint(){
 const dial=$('#dial');
 function drawDial(){
  const W=dial.clientWidth,H=dial.clientHeight;if(!W)return;const x=l=>((l+180)/360*W).toFixed(1);let g='';
- for(let l=-180;l<=180;l+=5){const M=l%30===0;g+=`<line x1="${x(l)}" x2="${x(l)}" y1="${H-(M?22:12)}" y2="${H-5}" stroke="#fff" stroke-opacity="${M?.75:.35}" stroke-width="${M?1.5:1}"/>`}
- [[-98,'Americas'],[14,W<520?'Eur · Africa':'Europe · Africa'],[92,'Asia'],[150,'Oceania']].forEach(([l,t])=>g+=`<text x="${x(l)}" y="21" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">${t}</text>`);
- if(W>=520)[-120,-60,0,60,120].forEach(l=>g+=`<text x="${x(l)}" y="${H-28}" text-anchor="middle" fill="#fff" fill-opacity=".7" font-size="11">${Math.abs(l)}°${l<0?' W':l>0?' E':''}</text>`);
+ for(let l=-180;l<=180;l+=5){const M=l%30===0;g+=`<line x1="${x(l)}" x2="${x(l)}" y1="${H-(M?22:12)}" y2="${H-5}" stroke="currentColor" stroke-opacity="${M?.8:.4}" stroke-width="${M?1.5:1}"/>`}
+ [[-98,'Americas'],[14,W<520?'Eur · Africa':'Europe · Africa'],[92,'Asia'],[150,'Oceania']].forEach(([l,t])=>g+=`<text x="${x(l)}" y="21" text-anchor="middle" fill="currentColor" font-size="13" font-family="Righteous, Archivo, sans-serif">${t}</text>`);
+ if(W>=520)[-120,-60,0,60,120].forEach(l=>g+=`<text x="${x(l)}" y="${H-28}" text-anchor="middle" fill="currentColor" fill-opacity=".65" font-size="11" font-weight="600">${Math.abs(l)}°${l<0?' W':l>0?' E':''}</text>`);
  dial.innerHTML=g;
 }
 const dro=new ResizeObserver(drawDial);dro.observe(dial);
@@ -277,6 +287,7 @@ $('#islBtn').onclick=()=>{const s=S.cur;if(!s)return;
  else{islHide.delete(s.stationuuid);if(!islMine.some(x=>x.stationuuid===s.stationuuid))islMine=[slim(s),...islMine];toast('Added to your Islamic list')}
  store.set('islMine',islMine);store.set('islHide',[...islHide]);buildIsl();if(S.tab==='islamic')render();paint()};
 $('#copy').onclick=()=>{const u=S.cur&&(S.cur.url_resolved||S.cur.url);if(!u)return;try{navigator.clipboard.writeText(u).then(()=>toast('Stream link copied'),()=>toast(u))}catch(e){toast(u)}};
+$('#resume').checked=store.get('resume',true);$('#resume').onchange=e=>{store.set('resume',e.target.checked);if(!e.target.checked)resumeAfter=false};
 $('#vol').oninput=e=>{au.volume=+e.target.value;store.set('vol',au.volume)};
 $('#list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=rows();
  if(b.dataset.f!=null)return fav(r[+b.dataset.f]);
