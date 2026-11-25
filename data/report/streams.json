@@ -48,7 +48,7 @@
    "category": "Quran",
    "streams": [
     {
-     "url": "http://n0d.radiojar.com/0tpy1h0kxtzuv?rj-ttl=5&rj-tok=AAABohSoX1kA7bVJDXgvNNwvuQ",
+     "url": "http://n03.radiojar.com/0tpy1h0kxtzuv?rj-ttl=5&rj-tok=AAABohSsN7AAitgEJpENLka1Ag",
      "type": "audio/mpeg",
      "https": false,
      "found_on": "https://makkahlive.net/en/radio/quran-saudi"
@@ -76,13 +76,13 @@
    "category": "Quran",
    "streams": [
     {
-     "url": "http://n0d.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohSod44AXeOcYX2MR_XHSQ",
+     "url": "http://n04.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohSsTAcAMI1tsMO2-wYkrw",
      "type": "audio/mpeg",
      "https": false,
      "found_on": "direct test"
     },
     {
-     "url": "http://n0d.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohSoejQAPgpvCwZNyweFFA",
+     "url": "http://n04.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohSsUgAAVTO2IyDqS7dN6w",
      "type": "audio/mpeg",
      "https": false,
      "found_on": "direct test"
@@ -130,6 +130,48 @@
   {
    "name": "Handasat al-Quloob · هندسة القلوب",
    "url": "https://s1.reliastream.com/proxy/almaqrami?mp=/stream",
+   "ok": true,
+   "type": "audio/mpeg"
+  },
+  {
+   "name": "Jamia Radio · Nairobi",
+   "url": "https://servidor23-3.brlogic.com:7098/live",
+   "ok": true,
+   "type": "audio/mpeg"
+  },
+  {
+   "name": "Ashabulhadith Radio",
+   "url": "https://cast1.asurahosting.com/proxy/ashabulhadith/stream",
+   "ok": true,
+   "type": "audio/mpeg"
+  },
+  {
+   "name": "Radio Sunna · إذاعة السنة",
+   "url": "https://radiosunna.radioca.st/stream",
+   "ok": true,
+   "type": "audio/mpeg"
+  },
+  {
+   "name": "Radio Islam International",
+   "url": "https://cast1.my-control-panel.com/proxy/netmoham/radioislam.mp3",
+   "ok": true,
+   "type": "audio/mpeg"
+  },
+  {
+   "name": "Muslim Community Radio 2MFM 92.1",
+   "url": "https://live.2mfm.org.au/",
+   "ok": true,
+   "type": "audio/mpeg"
+  },
+  {
+   "name": "Inspire FM · Luton",
+   "url": "https://listen-inspirefm.sharp-stream.com/inspirefm.mp3",
+   "ok": true,
+   "type": "audio/mpeg"
+  },
+  {
+   "name": "Crescent Radio · Rochdale",
+   "url": "https://radio.canstream.co.uk:8152/live.mp3",
    "ok": true,
    "type": "audio/mpeg"
   }

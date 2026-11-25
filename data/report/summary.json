@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-25T21:31:12+00:00",
+ "generated": "2026-11-25T21:35:28+00:00",
  "directory_total": 53396,
  "app_before_https": 298,
  "new_total": 565,
@@ -9,15 +9,15 @@
   "radio-browser": 388
  },
  "by_category": {
-  "Quran": 452,
-  "Islamic talk": 78,
+  "Quran": 444,
+  "Islamic talk": 86,
   "Lectures & dawah": 24,
   "Nasheed": 9,
   "Mosque live": 2
  },
  "by_category_https": {
-  "Quran": 431,
-  "Islamic talk": 50,
+  "Quran": 425,
+  "Islamic talk": 56,
   "Lectures & dawah": 16,
   "Nasheed": 7,
   "Mosque live": 2
