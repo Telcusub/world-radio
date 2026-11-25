@@ -34,14 +34,13 @@
 *{box-sizing:border-box;min-width:0}
 [hidden]{display:none!important}
 html{color-scheme:dark;-webkit-text-size-adjust:100%;background:var(--bg)}
-body{margin:0;background:radial-gradient(140% 640px at 50% 0%,#1d1d21,var(--bg) 70%) no-repeat,var(--bg);color:var(--txt);font:16px/1.5 'Chakra Petch',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip;padding-bottom:110px}
+body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:radial-gradient(140% 640px at 50% 0%,#1d1d21,var(--bg) 70%) no-repeat,var(--bg);color:var(--txt);font:16px/1.5 'Chakra Petch',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:3px solid var(--orange);outline-offset:2px}
 a{color:inherit}
 svg{display:block}
 .wrap{max-width:1180px;margin:0 auto;padding:0 max(4vw,12px)}
-.rx .wrap{max-width:640px;padding-top:14px}
 
 /* backlit LCD */
 .case{border-radius:24px;padding:6px;background:#050505;box-shadow:0 0 0 1px var(--edge),0 0 38px var(--halo)}
@@ -73,7 +72,7 @@ svg{display:block}
 .needle.lost{opacity:.3}
 
 /* nameplate, keys, presets */
-.prow{display:flex;align-items:center;gap:10px;margin:16px 0 12px}
+.prow{display:flex;align-items:center;gap:10px}
 .plate{border:0;padding:9px 15px;border-radius:11px;color:var(--orange);font:15px/1 Audiowide,'Chakra Petch',sans-serif;letter-spacing:.08em;background:linear-gradient(180deg,#27272b,#131315);text-shadow:0 0 8px rgb(255 122 26/.9),0 0 18px rgb(255 122 26/.5);
  box-shadow:inset 0 1px 0 rgb(255 255 255/.12),0 0 0 1.5px rgb(255 122 26/.6),0 0 18px rgb(255 122 26/.35),0 4px 0 #000;animation:plate 3.2s ease-in-out infinite}
 @keyframes plate{50%{box-shadow:inset 0 1px 0 rgb(255 255 255/.12),0 0 0 1.5px rgb(255 122 26/.9),0 0 28px rgb(255 122 26/.55),0 4px 0 #000}}
@@ -92,14 +91,14 @@ svg{display:block}
 .deck{border-radius:20px;padding:12px 10px 10px;background:var(--chassis);box-shadow:inset 0 0 0 1px var(--edge);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .deck .key{width:100%;height:54px}
 .lbl{display:block;font:600 10px/1 'Chakra Petch',sans-serif;letter-spacing:.16em;color:var(--mute);text-align:center;margin-top:8px;text-transform:uppercase;white-space:nowrap}
-.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .pre{position:relative;height:60px;padding:8px 10px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:3px;text-align:left;color:var(--txt)}
 .pre .n{font:15px/1 'Share Tech Mono',monospace;color:var(--glow);text-shadow:0 0 6px var(--glow)}
 .pre .nm{font-size:11.5px;font-weight:600;line-height:1.2;color:#d9d6cf;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
 .pre.empty .nm{color:var(--mute);font-weight:500}
 .pre i{position:absolute;top:9px;right:9px;width:6px;height:6px;border-radius:50%;background:#2e2e33}
 .pre.cur i{background:var(--orange);box-shadow:0 0 6px var(--orange)}
-.fn{display:flex;align-items:flex-start;gap:12px;margin-top:14px}
+.fn{display:flex;align-items:flex-start;gap:10px}
 .fn .key{width:58px;height:48px}
 .fader{flex:1;display:block;padding-top:6px}
 .fader .lbl{text-align:left;margin:0 0 2px}
@@ -111,14 +110,9 @@ input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:v
 input[type=range]::-moz-range-thumb{width:18px;height:26px;border:0;border-radius:5px;background:linear-gradient(90deg,#9aa0a4,#f2f3f4 45%,#8b9195)}
 .links{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:12px;font-size:13px}
 .lnk,.links a{border:0;background:none;padding:0;min-height:28px;color:var(--glow);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:3px}
-.stat{font-size:12px;color:var(--mute);margin-top:2px}
+.stat{font-size:12px;color:var(--mute);margin:12px 0 0}
 
 /* lists, tabs, fields */
-.tabs{display:flex;gap:8px;margin:26px 0 16px;overflow-x:auto;padding:2px 2px 8px}
-.tab{flex:none;min-height:44px;padding:0 14px;border:0;border-radius:12px;color:#d9d6cf;font-weight:700;font-size:15px;background:linear-gradient(180deg,#26262b,#141416);box-shadow:inset 0 1px 0 rgb(255 255 255/.1),0 3px 0 #000}
-.tab[aria-selected=true]{color:var(--glow);text-shadow:0 0 8px var(--glow);transform:translateY(2px);box-shadow:inset 0 2px 6px rgb(0 0 0/.7),0 0 0 1.5px var(--glow),0 0 14px var(--halo)}
-.tab span{color:var(--orange)}
-.tab svg{display:inline-block;vertical-align:-2px;margin-right:5px}
 .search,.islbar{display:flex;gap:8px}
 input[type=search],select{width:100%;min-height:48px;padding:0 14px;border:0;border-radius:14px;background:#0c0c0e;color:var(--txt);font-size:16px;box-shadow:inset 0 2px 6px rgb(0 0 0/.8),0 0 0 1px var(--edge)}
 input::placeholder{color:#7d7a74}
@@ -158,26 +152,61 @@ select{-webkit-appearance:none;appearance:none;padding-right:36px;background-ima
 .foot a{color:var(--glow)}
 
 /* mini player */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;gap:8px;padding:10px max(3vw,10px) calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#1d1d21,#0b0b0d);border-radius:20px 20px 0 0;box-shadow:0 -10px 28px rgb(0 0 0/.6),inset 0 1px 0 rgb(255 255 255/.1);transform:translateY(115%);transition:transform .25s ease}
-.dock.show{transform:none}
+.dock{flex:none;display:flex;align-items:center;gap:8px;padding:8px max(3vw,10px);background:linear-gradient(180deg,#1d1d21,#111113);box-shadow:inset 0 1px 0 rgb(255 255 255/.08),0 -6px 18px rgb(0 0 0/.5)}
 .dock .logo{width:42px;height:42px;border-radius:10px;font-size:13px}
 .dtx{flex:1;display:grid;padding:5px 10px;border-radius:10px;background:var(--lcd-bg);color:var(--ink);font-family:'Share Tech Mono',monospace;text-transform:uppercase;box-shadow:inset 0 0 10px rgb(0 0 0/.25)}
 .dtx b{font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px;line-height:1.2}
 .dtx .sig{font-size:11px}
 .dtx .sig .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dock .key{width:44px;height:44px;border-radius:12px}
-.toast{position:fixed;left:50%;bottom:96px;z-index:6;transform:translateX(-50%);max-width:min(92vw,480px);padding:10px 16px;border-radius:12px;background:var(--lcd-bg);color:var(--ink);font:14px 'Share Tech Mono',monospace;text-transform:uppercase;box-shadow:0 8px 24px rgb(0 0 0/.5),0 0 24px var(--halo);opacity:0;pointer-events:none;transition:opacity .2s}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));z-index:8;transform:translateX(-50%);max-width:min(92vw,480px);padding:10px 16px;border-radius:12px;background:var(--lcd-bg);color:var(--ink);font:14px 'Share Tech Mono',monospace;text-transform:uppercase;box-shadow:0 8px 24px rgb(0 0 0/.5),0 0 24px var(--halo);opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.show{opacity:1}
 
+/* app shell: one screen, no page scroll */
+html{height:100%}
+.app{position:fixed;left:0;right:0;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column}
+.view{flex:1;min-height:0;position:relative}
+.radio{overflow:hidden}
+.fit{width:100%;max-width:620px;min-height:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px;padding:12px max(3vw,10px) 10px}
+.fit .case{flex:1 1 auto;display:flex}
+.fit .lcd{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.fit.measure{min-height:0!important}.fit.measure .case{flex:none}
+.fit .spec{flex:1 1 auto;min-height:0}.fit .spec div{justify-content:flex-end}.fit .spec b{flex:1 1 0;min-height:5px;max-height:16px}
+.fit.measure .spec{flex:none}.fit.measure .spec b{flex:none;height:6px}
+.browse{display:flex;flex-direction:column}
+.bhead{flex:none;width:100%;max-width:1180px;margin:0 auto;padding:12px max(3vw,10px) 0}
+.scroller{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:2px max(3vw,10px) 18px}
+.scroller>*{max-width:1180px;margin-left:auto;margin-right:auto}
+.fk{position:relative;flex:none;width:48px;height:48px}
+.badge{position:absolute;top:5px;right:5px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--orange);color:#000;font:700 10px/16px 'Chakra Petch',sans-serif;text-align:center}
+.fpanel{margin-top:10px;padding:12px;border-radius:16px;background:var(--chassis);box-shadow:inset 0 0 0 1px var(--edge)}
+.fpanel .filters{margin-top:0}
+#isl .irow{margin-top:10px;max-width:420px}
+.navbar{flex:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:6px max(2vw,8px) calc(6px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#151518,#0a0a0b);box-shadow:0 -1px 0 var(--edge)}
+.nav{border:0;background:none;color:var(--mute);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:50px;padding:4px 0;border-radius:12px;font:600 10px/1 'Chakra Petch',sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.nav svg{width:20px;height:20px}
+.nav[aria-current=true]{color:var(--glow);text-shadow:0 0 8px var(--glow);background:linear-gradient(180deg,#232327,#121214);box-shadow:inset 0 0 0 1.5px var(--glow),0 0 12px var(--halo)}
+.nav[aria-current=true] svg{filter:drop-shadow(0 0 5px var(--glow))}
+.nav em{font-style:normal;color:var(--orange);margin-left:3px}
+.dtx{cursor:pointer}
+.sheet{position:fixed;inset:0;z-index:7;background:rgb(0 0 0/.6);display:flex;align-items:flex-end;justify-content:center}
+.sheet-in{width:100%;max-width:620px;max-height:86dvh;overflow:auto;background:linear-gradient(180deg,#1c1c20,#0e0e10);border-radius:22px 22px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgb(0 0 0/.6),inset 0 1px 0 rgb(255 255 255/.1)}
+.sh-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.sh-head b{font:16px Audiowide,sans-serif;color:var(--orange);text-shadow:0 0 8px rgb(255 122 26/.6)}
+.info{display:grid;gap:2px;padding:12px 14px;border-radius:14px;background:var(--lcd-bg);color:var(--ink);font-family:'Share Tech Mono',monospace;text-transform:uppercase;box-shadow:inset 0 0 14px rgb(0 0 0/.25)}
+.info b{font-weight:400;font-size:17px;overflow-wrap:anywhere}
+.info span{font-size:12px;overflow-wrap:anywhere}
+.sets{margin-top:10px;border-top:1px solid var(--edge);padding-top:6px}
+.fn .vnote{align-self:center;margin:0 0 0 auto;white-space:normal;text-align:right;line-height:1.4}
 @media (max-width:860px){.filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:430px){.tabs{gap:6px}.tab{padding:0 10px;font-size:14px}}
 @media (max-width:380px){.dg{transform:scale(.88);margin:0 -3px}.pre .nm{font-size:11px}.deck{gap:6px}.lbl{letter-spacing:.1em}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<header class="rx">
- <div class="wrap">
+<div class="app">
+ <section class="view radio" id="vRadio" aria-label="Radio">
+  <div class="fit" id="fit">
   <div class="case">
    <div class="lcd idle" id="lcd">
     <div class="lr"><span>World Radio · <span id="lcdPre">Preset –</span></span><span class="lamp" id="lamp"><i></i>Live</span></div>
@@ -207,26 +236,22 @@ select{-webkit-appearance:none;appearance:none;padding-right:36px;background-ima
   <div class="fn">
    <div><button class="key" id="kLight" aria-label="Switch backlight colour"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg></button><span class="lbl">Light</span></div>
    <div><button class="key" id="kSleep" aria-label="Sleep timer: off"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="currentColor"/><path d="M15 4h4l-4 4h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="lbl" id="sleepLbl">Sleep</span></div>
+   <div><button class="key" id="kInfo" aria-label="Station info and settings" aria-haspopup="dialog"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.4" fill="currentColor"/></svg></button><span class="lbl">Info</span></div>
    <label class="fader" id="fader"><span class="lbl">Volume</span><input type="range" id="vol" min="0" max="1" step="0.01" value="1"></label>
   </div>
-  <div class="links"><a id="nWeb" target="_blank" rel="noopener" hidden>Station website</a><button class="lnk" id="islBtn" hidden>Add to Islamic list</button><button class="lnk" id="copy" hidden>Copy stream link</button></div>
-  <div class="stat" id="stat">Connecting to the station directory…</div>
- </div>
-</header>
+  </div>
+ </section>
 
-<main class="wrap">
- <div class="tabs" role="tablist">
-  <button class="tab" role="tab" aria-selected="true" data-t="explore">Explore</button>
-  <button class="tab isl" role="tab" aria-selected="false" data-t="islamic"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 3.2a8.8 8.8 0 1 0 5.9 15.3A7.2 7.2 0 1 1 15 3.2z" fill="currentColor"/></svg>Islamic</button>
-  <button class="tab" role="tab" aria-selected="false" data-t="favs">Favorites <span id="fc"></span></button>
-  <button class="tab" role="tab" aria-selected="false" data-t="recent">Recent</button>
- </div>
- <section id="finder">
-  <form class="search" id="form" role="search">
-   <input type="search" id="q" placeholder="Station name, e.g. BBC or Capital FM" autocomplete="off" enterkeyhint="search" aria-label="Search stations by name">
-   <button class="btn" type="submit">Search</button>
-  </form>
-  <div class="filters">
+ <section class="view browse" id="vBrowse" aria-label="Stations" hidden>
+  <div class="bhead">
+   <section id="finder">
+    <form class="search" id="form" role="search">
+     <input type="search" id="q" placeholder="Station name, e.g. BBC or Capital FM" autocomplete="off" enterkeyhint="search" aria-label="Search stations by name">
+     <button class="btn" type="submit">Search</button>
+     <button class="key fk" type="button" id="kFilt" aria-expanded="false" aria-controls="fpanel" aria-label="Filters: country, language, genre, sort"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><path d="M4 7h11M19 7h1M4 17h3M11 17h9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="17" cy="7" r="2.4" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="9" cy="17" r="2.4" fill="none" stroke="currentColor" stroke-width="2.2"/></svg><span class="badge" id="fbadge" hidden></span></button>
+    </form>
+    <div class="fpanel" id="fpanel" hidden>
+     <div class="filters">
    <label>Country<select id="cc"><option value="">All countries</option></select></label>
    <label>Language<select id="lang"><option value="">All languages</option></select></label>
    <label>Genre<select id="tag"><option value="">All genres</option></select></label>
@@ -239,35 +264,56 @@ select{-webkit-appearance:none;appearance:none;padding-right:36px;background-ima
     <option value="random">Random mix</option>
    </select></label>
   </div>
-  <div class="opts">
-   <label class="chk"><input type="checkbox" id="secure">HTTPS streams only</label>
-   <label class="chk"><input type="checkbox" id="skip" checked>Jump to the next station if one goes off air</label>
-   <label class="chk"><input type="checkbox" id="resume" checked>Resume when other apps stop playing</label>
-  </div>
-  <p class="hint" id="secHint" hidden>Opened from a web link, your browser can only play HTTPS streams. Turn this off to see every station; some of them may not play.</p>
-  <div class="chips" id="chips"></div>
- </section>
- <section id="isl" hidden>
-  <div class="islbar">
+     <label class="chk"><input type="checkbox" id="secure">HTTPS streams only</label>
+     <p class="hint" id="secHint" hidden>Opened from a web link, your browser can only play HTTPS streams. Turn this off to see every station; some of them may not play.</p>
+    </div>
+    <div class="chips" id="chips"></div>
+   </section>
+   <section id="isl" hidden>
+    <div class="islbar">
    <input type="search" id="iq" placeholder="Filter by name, country or language" autocomplete="off" enterkeyhint="search" aria-label="Filter Islamic stations">
    <button class="btn" id="starAll" type="button">Star all</button>
   </div>
-  <div class="irow"><label>Country<select id="icc"><option value="">All countries</option></select></label></div>
-  <div class="chips" id="icats" aria-label="Categories"></div>
-  <p class="hint">Every Sunni Islamic station in the free radio directory, plus hand-picked ones and Quran reciter radios, A to Z, refreshed daily. The directory doesn't say which tradition a station follows, so stations marked Shia or Ahmadi, and stations from Iran, are left out. Missing one? Play it from Explore, then tap “Add to Islamic list” under the dial.</p>
+    <div class="irow"><label>Country<select id="icc"><option value="">All countries</option></select></label></div>
+    <div class="chips" id="icats" aria-label="Categories"></div>
+   </section>
+   <p class="count" id="count" aria-live="polite">Tuning in…</p>
+  </div>
+  <div class="scroller" id="scroller">
+   <ul class="list" id="list"></ul>
+   <div class="more"><button class="btn ghost" id="more" hidden>Load more stations</button></div>
+   <p class="hint" id="islHint" hidden>Every Sunni Islamic station in the free radio directory, plus hand-picked ones and Quran reciter radios, A to Z, refreshed daily. The directory doesn't say which tradition a station follows, so stations marked Shia or Ahmadi, and stations from Iran, are left out. Missing one? Play it from Explore, then tap “Add to Islamic list” under the dial.</p>
+   <p class="foot">Station directory from <a href="https://www.radio-browser.info" target="_blank" rel="noopener">Radio Browser</a>, a free community database of internet radio. Audio comes straight from each broadcaster. Favorites and recent stations are saved on this device only.</p>
+  </div>
  </section>
- <p class="count" id="count" aria-live="polite">Tuning in…</p>
- <ul class="list" id="list"></ul>
- <div class="more"><button class="btn ghost" id="more" hidden>Load more stations</button></div>
- <p class="foot">Station directory from <a href="https://www.radio-browser.info" target="_blank" rel="noopener">Radio Browser</a>, a free community database of internet radio. Audio comes straight from each broadcaster. Favorites and recent stations are saved on this device only.</p>
-</main>
 
-<div class="dock" id="dock">
+ <div class="dock" id="dock" hidden>
  <span class="logo" id="dLogo"><i>FM</i></span>
  <div class="dtx"><b id="dName">World Radio</b><div class="sig idle" id="dStatus"><i></i><span class="eq" aria-hidden="true"><b></b><b></b><b></b><b></b></span><span class="t"></span></div></div>
  <button class="key fav js-fav" id="dFav" aria-label="Add to favorites"></button>
  <button class="key play js-play" id="dPlay" aria-label="Play"></button>
  <button class="key" id="dNext" aria-label="Next station"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24"><path d="M15.6 5H18v14h-2.4zM4.5 5v14l10-7z" fill="currentColor"/></svg></button>
+</div>
+ <nav class="navbar" aria-label="Sections">
+  <button class="nav" data-v="radio" aria-current="true"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zM7 9l10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="14.5" r="2.5" fill="currentColor"/><path d="M15 13h3M15 16h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Radio</span></button>
+  <button class="nav" data-v="explore" aria-current="false"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>Explore</span></button>
+  <button class="nav" data-v="islamic" aria-current="false"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 3.2a8.8 8.8 0 1 0 5.9 15.3A7.2 7.2 0 1 1 15 3.2z" fill="currentColor"/></svg><span>Islamic</span></button>
+  <button class="nav" data-v="favs" aria-current="false"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3.3l2.7 5.5 6 .9-4.4 4.2 1.1 6L12 17l-5.4 2.9 1.1-6-4.4-4.2 6-.9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Favs<em id="fc"></em></span></button>
+  <button class="nav" data-v="recent" aria-current="false"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Recent</span></button>
+ </nav>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+ <div class="sheet-in" role="dialog" aria-modal="true" aria-labelledby="shT">
+  <div class="sh-head"><b id="shT">Station info &amp; settings</b><button class="key sm" id="sheetX" aria-label="Close"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button></div>
+  <div class="info"><b id="infoName">No station playing yet</b><span id="infoMeta">Pick a preset or a station to see its details here.</span></div>
+  <div class="links"><a id="nWeb" target="_blank" rel="noopener" hidden>Station website</a><button class="lnk" id="islBtn" hidden>Add to Islamic list</button><button class="lnk" id="copy" hidden>Copy stream link</button></div>
+  <div class="sets">
+   <label class="chk"><input type="checkbox" id="skip" checked>Jump to the next station if one goes off air</label>
+   <label class="chk"><input type="checkbox" id="resume" checked>Resume when other apps stop playing</label>
+  </div>
+  <p class="stat" id="stat">Connecting to the station directory…</p>
+ </div>
 </div>
 <div class="toast" id="toast" role="status"></div>
 

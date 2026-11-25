@@ -163,8 +163,8 @@ async function meta(){
 function fill(id,all,items,val){const el=$('#'+id);el.innerHTML=`<option value="">${all}</option>`+items.map(([v,t,n])=>`<option value="${esc(v)}">${esc(t)} (${fmt(n)})</option>`).join('');setSel(el,val)}
 function setSel(el,v){if(v&&![...el.options].some(o=>o.value===v))el.insertAdjacentHTML('beforeend',`<option value="${esc(v)}">${esc(el.id==='cc'?v:cap(v))}</option>`);el.value=v||''}
 function markChips(){$$('.chip').forEach(b=>{const f=CHIPS[+b.dataset.c][1];b.classList.toggle('on',!S.q&&(f.cc||'')===S.cc&&(f.lang||'')===S.lang&&(f.tag||'')===S.tag)})}
-function sync(){$('#q').value=S.q;setSel($('#cc'),S.cc);setSel($('#lang'),S.lang);setSel($('#tag'),S.tag);$('#order').value=S.order;$('#secure').checked=S.secure;markChips()}
-const saveF=()=>store.set('filters',{q:S.q,cc:S.cc,lang:S.lang,tag:S.tag,order:S.order,secure:S.secure});
+function sync(){filtBadge();$('#q').value=S.q;setSel($('#cc'),S.cc);setSel($('#lang'),S.lang);setSel($('#tag'),S.tag);$('#order').value=S.order;$('#secure').checked=S.secure;markChips()}
+const saveF=()=>{store.set('filters',{q:S.q,cc:S.cc,lang:S.lang,tag:S.tag,order:S.order,secure:S.secure});filtBadge()};
 function apply(f){S.q=f.q||'';S.cc=f.cc||'';S.lang=f.lang||'';S.tag=f.tag||'';sync();saveF();load(true)}
 
 /* ---------- player: keeps the stream alive ---------- */
@@ -246,7 +246,7 @@ if('mediaSession' in navigator){const h=(a,f)=>{try{navigator.mediaSession.setAc
 
 /* ---------- receiver paint ---------- */
 const lonOf=s=>{const g=parseFloat(s.geo_long);if(Number.isFinite(g)&&g!==0&&Math.abs(g)<=180)return[g,false];const c=LON[String(s.countrycode||'').toUpperCase()];return c==null?null:[c,true]};
-let rxVis=true;const dockShow=()=>$('#dock').classList.toggle('show',!rxVis&&!!S.cur);
+let view='radio';const dockShow=()=>{$('#dock').hidden=!(view!=='radio'&&S.cur)};
 function paint(){
  const s=S.cur,on=S.want,f=isFav(s);
  $$('.js-play').forEach(b=>{b.innerHTML=on?I.pause:I.play;b.setAttribute('aria-label',on?'Pause':'Play');b.classList.toggle('on',on)});
@@ -299,16 +299,45 @@ $('#order').addEventListener('change',e=>{S.order=e.target.value;saveF();load(tr
 $('#secure').addEventListener('change',e=>{S.secure=e.target.checked;saveF();load(true);refill();islAuto=null;islFrom='';buildIsl();loadIsl()});
 $('#chips').innerHTML=CHIPS.map(([l],i)=>`<button class="chip" type="button" data-c="${i}">${l}</button>`).join('');
 $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)apply(CHIPS[+b.dataset.c][1])});
-const HASH={explore:'',islamic:'islamic',favs:'favorites',recent:'recent'};
-function setTab(t){
- if(!(t in HASH))t='explore';S.tab=t;store.set('tab',t);
- $$('.tab').forEach(x=>x.setAttribute('aria-selected',String(x.dataset.t===t)));
- $('#finder').hidden=t!=='explore';$('#isl').hidden=t!=='islamic';
- try{history.replaceState(null,'',location.pathname+location.search+(HASH[t]?'#'+HASH[t]:''))}catch(e){}
- render();if(t==='islamic')loadIsl();
+const HASH={radio:'',explore:'explore',islamic:'islamic',favs:'favorites',recent:'recent'};
+function setView(v){
+ if(!(v in HASH))v='radio';const changed=v!==view;view=v;store.set('view',v);
+ $$('.nav').forEach(x=>x.setAttribute('aria-current',String(x.dataset.v===v)));
+ $('#vRadio').hidden=v!=='radio';$('#vBrowse').hidden=v==='radio';
+ if(v!=='radio'){S.tab=v;store.set('tab',v);$('#finder').hidden=v!=='explore';$('#isl').hidden=v!=='islamic';$('#islHint').hidden=v!=='islamic';
+  render();if(v==='islamic')loadIsl();if(changed)$('#scroller').scrollTop=0}
+ try{history.replaceState(null,'',location.pathname+location.search+(HASH[v]?'#'+HASH[v]:''))}catch(e){}
+ dockShow();if(v==='radio')requestAnimationFrame(fitRadio);
 }
-$$('.tab').forEach(t=>t.addEventListener('click',()=>setTab(t.dataset.t)));
-window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);const t=Object.keys(HASH).find(k=>HASH[k]===h);if(t&&t!==S.tab)setTab(t)});
+$$('.nav').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);const v=Object.keys(HASH).find(k=>HASH[k]===h);if(v&&v!==view)setView(v)});
+$('.dtx').onclick=$('#dLogo').onclick=()=>setView('radio');
+
+/* the radio screen always fits the phone exactly: taller phones get a taller display, shorter ones a slightly smaller radio */
+function fitRadio(){
+ const v=$('#vRadio'),f=$('#fit');if(v.hidden)return;
+ f.style.zoom='';f.style.width='';f.style.minHeight='';f.classList.add('measure');
+ const H=v.clientHeight,W=v.clientWidth,nat=f.scrollHeight;f.classList.remove('measure');
+ if(!H||!nat)return;
+ if(nat<=H){f.style.minHeight=H+'px';return}
+ const z=Math.max(.55,H/nat-.004);f.style.zoom=z;f.style.width=Math.min(W/z,620)+'px';f.style.minHeight=(H/z)+'px';
+}
+const fro=new ResizeObserver(()=>fitRadio());fro.observe($('#vRadio'));
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitRadio);
+
+/* Filters key: country, language, genre and sort stay folded away */
+function filtBadge(){const n=[S.cc,S.lang,S.tag].filter(Boolean).length+(S.order!=='clickcount'?1:0);const b=$('#fbadge');b.textContent=n;b.hidden=!n}
+$('#kFilt').onclick=()=>{const p=$('#fpanel'),open=p.hidden;p.hidden=!open;$('#kFilt').setAttribute('aria-expanded',String(open));$('#kFilt').classList.toggle('lit',open)};
+
+/* Info sheet: station details, links and playback settings */
+function openSheet(){const s=S.cur;
+ $('#infoName').textContent=s?nm(s):'No station playing yet';
+ $('#infoMeta').textContent=s?[s.country,cap(lang1(s)),quality(s),s.category,tagsOf(s).join(', ')].filter(Boolean).join(' · '):'Pick a preset or a station to see its details here.';
+ $('#sheet').hidden=false;$('#sheetX').focus()}
+const closeSheet=()=>{$('#sheet').hidden=true;$('#kInfo').focus({preventScroll:true})};
+$('#kInfo').onclick=openSheet;$('#sheetX').onclick=closeSheet;
+$('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden)closeSheet()});
 $('#iq').addEventListener('input',()=>{filterIsl();render()});
 $('#icats').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;islCat=b.dataset.v;$$('#icats .chip').forEach(x=>x.classList.toggle('on',x===b));filterIsl();render()});
 $('#icc').addEventListener('change',e=>{islCC=e.target.value;filterIsl();render()});
@@ -319,8 +348,7 @@ $('#starAll').addEventListener('click',()=>{
  render();paint();
 });
 $('#more').onclick=()=>load(false);
-const io=new IntersectionObserver(es=>{if(es[0].isIntersecting&&S.tab==='explore')load(false)},{rootMargin:'700px 0px'});io.observe($('#more'));
-const kio=new IntersectionObserver(es=>{rxVis=es[0].isIntersecting;dockShow()});kio.observe($('#keys'));
+const io=new IntersectionObserver(es=>{if(es[0].isIntersecting&&S.tab==='explore'&&view==='explore')load(false)},{root:$('#scroller'),rootMargin:'700px 0px'});io.observe($('#more'));
 document.addEventListener('keydown',e=>{if(e.target.closest('input,select,textarea')||e.metaKey||e.ctrlKey||e.altKey)return;
  if(e.key===' '){e.preventDefault();toggle()}else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);else if(e.key==='f')fav(S.cur)});
 
@@ -395,16 +423,17 @@ $('#vol').oninput=e=>{au.volume=+e.target.value;store.set('vol',au.volume);volUI
 volUI();
 
 /* ---------- nameplate, search and Islamic keys ---------- */
-$('#home').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
-$('#kSearch').onclick=()=>{setTab('explore');$('#q').focus({preventScroll:true});$('.tabs').scrollIntoView({behavior:'smooth',block:'start'})};
-$('#kIsl').onclick=()=>{setTab('islamic');$('.tabs').scrollIntoView({behavior:'smooth',block:'start'})};
+$('#home').onclick=()=>{setView('radio');toast($('#stat').textContent)};
+$('#kSearch').onclick=()=>{setView('explore');$('#q').focus({preventScroll:true})};
+$('#kIsl').onclick=()=>setView('islamic');
 
 /* ---------- start ---------- */
 setInterval(tick,1000);tick();sleepUI();
 $('#secHint').hidden=!WEB;$('#fc').textContent=favs.length||'';sync();paint();
 const last=store.get('last',null);
 if(last&&last.stationuuid){S.cur=last;S.queue=[last];S.idx=0;paint();setStatus('Tap play to pick up where you left off','idle')}
-{const h=location.hash.slice(1),t=Object.keys(HASH).find(k=>HASH[k]===h&&h);setTab(t||store.get('tab','explore'))}
+S.tab=store.get('tab','explore');if(!(S.tab in HASH)||S.tab==='radio')S.tab='explore';
+{const h=location.hash.slice(1),v=Object.keys(HASH).find(k=>HASH[k]===h&&h);setView(v||store.get('view','radio'))}
 {const c=store.get('isl2',null);if(c&&c.secure===S.secure&&Array.isArray(c.list))islAuto=c.list;buildIsl();paint()}
 Promise.all([discover(),loadExtra()]).then(()=>{meta();load(true);refill();loadIsl()});
 }
