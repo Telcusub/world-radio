@@ -20,11 +20,17 @@ let favs=store.get('favs',[]),recent=store.get('recent',[]),pool=[],favSet=new S
 const setFavs=a=>{favs=a;favSet=new Set(a.map(f=>f.stationuuid));store.set('favs',a);$('#fc').textContent=a.length||''};
 
 /* Sunni Islamic collection: gathered from the directory's tags and names, Shia/Ahmadi-marked and Iranian stations left out */
-const ISL_Q=[...['quran','quraan',"qur'an",'koran','coran','kuran','islam','muslim','sunna','nasheed','hadith','dawah','dakwah','قرآن','اسلام','إسلام'].map(v=>['tag',v]),
- ...['quran','quraan','koran','coran','islam','sunna','nasheed','iqra','قرآن'].map(v=>['name',v])];
-const ISL_RX=/qur'?a+n|koran|coran|kuran|islam(?!abad)|muslim|\bsunn(?:ah?|i)\b|nasheed|hadith|dawah|dakwah|\biqra|قرآن|القران|اسلام|إسلام|اسلامی/i;
+const ISL_TAGS=['quran','quraan',"qur'an",'koran','coran','kuran','islam','muslim','sunna','nasheed','hadith','dawah','dakwah','salaf','tafsir','religious','religion','قرآن','القرآن','اسلام','إسلام','السلفية','دعوة'];
+const ISL_NAMES=['quran','quraan','koran','coran','islam','sunna','nasheed','iqra','salaf','sheikh','shaykh','tafsir','mustaqim','eman','iman','huda','hidaya','furqan','tawheed','masjid','mosque','adhan','قرآن','القرآن','السلفية','الحديث','الإيمان','الايمان','الشيخ','تلاوة','تفسير','السنة','دعوة','التوحيد','الهدى','الفرقان'];
+const ISL_CC=['YE','SO','SA'];
+const ISL_Q=[...ISL_TAGS.map(v=>['tag',v]),...ISL_NAMES.map(v=>['name',v]),...ISL_CC.map(v=>['countrycode',v])];
+const ISL_RX=new RegExp(["qur'?a+n","koran","coran","kuran","islam(?!abad)","muslim","\\bsunn(?:ah?|i)\\b","nasheed","hadith","dawah","dakwah","\\biqra",
+ "salaf","tafs[ie]e?r","tilawa","\\badhan\\b","\\baza?an\\b","ruqy","fatwa","\\bsh[ae]i?y?kh\\b","\\bal[\\s-]?[ie]man\\b","mustaqim","hidaya","\\bal[\\s-]?huda\\b","furqan","tawh?ee?d|tawhid","\\bmasjid","\\bmosque",
+ "قرآن","القران","اسلام","إسلام","اسلامی","السلف","دار الحديث","السنة النبوية","أهل السنة","اهل السنة","الإيمان","الايمان","الشيخ","تلاوة","تلاوات","تفسير","دعوة","التوحيد","فتاوى","مصحف","الأذان","رقية","ابن القيم","ابن باز","ابن عثيمين","الألباني","الهدى","الفرقان"].join('|'),'i');
 const SHIA_RX=/shi'?a\b|shia|shiite|shi'ite|ahl.?(?:ul|e|al).?ba[iy]t|hussain|husain|hussein|husayn|hossein|karbala|ashura|noha|nauha|marsiya|zahra|imam.?(?:ali|reza|riza|husain|mahdi)|mahdi|ahmadi|al.?kawthar|ja'?fari|twelver|عاشوراء|الحسين|كربلاء|أهل البيت|اهل البيت|شيعة|الكوثر/i;
-let islAll=null,islView=[],islBusy=false,islErr=false;
+let islAuto=null,islAll=null,islView=[],islBusy=false,islErr=false,extra={add:[],hide:[]};
+let islMine=store.get('islMine',[]),islHide=new Set(store.get('islHide',[]));
+const norm=t=>String(t||'').toLowerCase().replace(/[\s'’`\-_.·,()]+/g,'');
 
 /* ---------- directory API (Radio Browser, with mirror fallback) ---------- */
 let servers=['de1.api.radio-browser.info','de2.api.radio-browser.info','fi1.api.radio-browser.info','nl1.api.radio-browser.info'].sort(()=>Math.random()-.5),si=0;
@@ -47,19 +53,19 @@ const tagsOf=s=>(s.tags||'').split(',').map(t=>t.trim()).filter(t=>t&&t.length<3
 const quality=s=>[s.bitrate>0?s.bitrate+' kbps':'',s.codec&&s.codec!=='UNKNOWN'?s.codec:''].filter(Boolean).join(' ');
 const info=s=>[s.countrycode||s.country,cap(lang1(s)),quality(s)].filter(Boolean).join(' · ');
 const isFav=s=>!!s&&favSet.has(s.stationuuid);
-const slim=s=>({stationuuid:s.stationuuid,name:s.name,url:s.url,url_resolved:s.url_resolved,homepage:s.homepage,favicon:s.favicon,tags:s.tags,country:s.country,countrycode:s.countrycode,language:s.language,codec:s.codec,bitrate:s.bitrate,hls:s.hls,geo_long:s.geo_long});
+const slim=s=>({stationuuid:s.stationuuid,name:s.name,aka:s.aka,about:s.about,url:s.url,url_resolved:s.url_resolved,homepage:s.homepage,favicon:s.favicon,tags:s.tags,country:s.country,countrycode:s.countrycode,language:s.language,codec:s.codec,bitrate:s.bitrate,hls:s.hls,geo_long:s.geo_long});
 const rows=()=>S.tab==='explore'?S.list:S.tab==='islamic'?islView:S.tab==='favs'?favs:recent;
 let tt=0;const toast=t=>{const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2800)};
 const count=t=>{$('#count').textContent=t};
 const setStatus=(t,k)=>{for(const el of[$('#nStatus'),$('#dStatus')]){el.className='sig '+k;el.querySelector('.t').textContent=t}};
 
 /* ---------- list rendering ---------- */
-const row=(s,i)=>`<li class="st${S.cur&&S.cur.stationuuid===s.stationuuid?' on':''}" data-u="${esc(s.stationuuid)}"><button class="hit" data-i="${i}"><span class="logo" style="--h:hsl(${hue(s)} 46% 40%)">${logoIn(s)}</span><span class="tx"><b>${esc(nm(s))}</b><small>${esc(info(s))}</small>${tagsOf(s).length?`<small class="tg">${esc(tagsOf(s).join(', '))}</small>`:''}</span></button><button class="star${isFav(s)?' is':''}" data-f="${i}" aria-label="${isFav(s)?'Remove from':'Add to'} favorites">${I.star}</button></li>`;
+const row=(s,i)=>`<li class="st${S.cur&&S.cur.stationuuid===s.stationuuid?' on':''}" data-u="${esc(s.stationuuid)}"><button class="hit" data-i="${i}"><span class="logo" style="--h:hsl(${hue(s)} 46% 40%)">${logoIn(s)}</span><span class="tx"><b>${esc(nm(s))}</b><small>${esc(info(s))}</small>${s.about||tagsOf(s).length?`<small class="tg">${esc(s.about||tagsOf(s).join(', '))}</small>`:''}</span></button><button class="star${isFav(s)?' is':''}" data-f="${i}" aria-label="${isFav(s)?'Remove from':'Add to'} favorites">${I.star}</button></li>`;
 function describe(){const p=[];if(S.q)p.push(`“${S.q}”`);if(S.cc){const o=$('#cc').selectedOptions[0];p.push(o?o.textContent.replace(/\s*\([\d,.\s]+\)$/,''):S.cc)}if(S.lang)p.push(cap(S.lang));if(S.tag)p.push(cap(S.tag));return p.length?' for '+p.join(', '):''}
 function countExplore(){
  if(S.busy&&!S.list.length)return count('Tuning in…');
  if(!S.list.length){$('#count').innerHTML='No stations match that. <button class="lnk" id="clear" type="button">Clear search and filters</button>';return}
- count(`${fmt(S.list.length)} stations${describe()}${S.done?'':', more load as you scroll'}`);
+ count(`${fmt(S.list.length)} station${S.list.length===1?'':'s'}${describe()}${S.done?'':', more load as you scroll'}`);
 }
 function render(){
  const r=rows();$('#list').innerHTML=r.map(row).join('');$('#more').hidden=S.tab!=='explore'||S.done||!r.length;
@@ -71,12 +77,14 @@ function render(){
 function islMeta(){
  const r=islView,all=islAll||[],q=$('#iq').value.trim(),on=r.length>0&&r.every(isFav);
  $('#starAll').textContent=on?'Unstar all':'Star all';$('#starAll').hidden=!r.length;
- if(!islAll)count(islErr?"Couldn't reach the radio directory. Check your connection, then open this tab again.":'Gathering Sunni Islamic stations…');
+ if(!islAuto)return count(islErr?"Couldn't reach the radio directory. Check your connection, then open this tab again.":'Gathering Sunni Islamic stations…');
  else if(!r.length)count(q?'No Islamic stations match that filter.':'No Islamic stations found right now.');
  else count(`${q?`${fmt(r.length)} of `:''}${fmt(all.length)} Sunni Islamic stations, A to Z · ${fmt(r.filter(isFav).length)} starred`);
 }
 async function load(reset){
- if(reset){S.gen++;S.list=[];S.seen=new Set();S.offset=0;S.done=false;S.busy=false;if(S.tab==='explore'){$('#list').innerHTML='';$('#more').hidden=true}}
+ if(reset){S.gen++;S.list=[];S.seen=new Set();S.offset=0;S.done=false;S.busy=false;if(S.tab==='explore'){$('#list').innerHTML='';$('#more').hidden=true}
+  if(S.q){const q=norm(S.q);for(const s of[...extra.add,...islMine]){if(S.seen.has(s.stationuuid)||!norm([s.name,s.aka].join(' ')).includes(q)||(S.cc&&s.countrycode!==S.cc))continue;S.seen.add(s.stationuuid);S.seen.add((s.url_resolved||s.url||'').replace(/\/+$/,''));S.list.push(s)}
+   if(S.list.length&&S.tab==='explore')$('#list').innerHTML=S.list.map(row).join('')}}
  if(S.busy||S.done)return;
  const g=S.gen;S.busy=true;if(S.tab==='explore'&&!S.list.length)count('Tuning in…');
  const p=new URLSearchParams({limit:LIM,offset:S.offset,hidebroken:'true',order:S.order,reverse:S.order==='name'?'false':'true'});
@@ -92,13 +100,25 @@ async function load(reset){
 }
 const coll=new Intl.Collator(undefined,{sensitivity:'base',numeric:true});
 const sortKey=s=>nm(s).replace(/^[^\p{L}\p{N}]+/u,'')||nm(s);
-function filterIsl(){const q=$('#iq').value.trim().toLowerCase(),a=islAll||[];
- islView=q?a.filter(s=>[s.name,s.country,s.language,s.tags].join(' ').toLowerCase().includes(q)):a}
+function filterIsl(){const q=norm($('#iq').value),a=islAll||[];
+ islView=q?a.filter(s=>norm([s.name,s.aka,s.about,s.country,s.language,s.tags].join(' ')).includes(q)):a}
+function buildIsl(){
+ if(!islAuto&&!extra.add.length&&!islMine.length){islAll=null;islView=[];return}
+ const hide=new Set([...islHide,...extra.hide]),ids=new Set(),urls=new Set(),out=[];
+ const push=s=>{if(!s||!s.stationuuid||hide.has(s.stationuuid)||hide.has(nm(s)))return;const u=(s.url_resolved||s.url||'').replace(/\/+$/,'');
+  if(ids.has(s.stationuuid)||(u&&urls.has(u)))return;ids.add(s.stationuuid);if(u)urls.add(u);out.push(s)};
+ extra.add.forEach(push);islMine.forEach(push);(islAuto||[]).forEach(push);
+ islAll=out.map(s=>[sortKey(s),s]).sort((a,b)=>coll.compare(a[0],b[0])).map(x=>x[1]);filterIsl();
+}
+const inIsl=s=>!!s&&(islAll||[]).some(x=>x.stationuuid===s.stationuuid);
+async function loadExtra(){try{const r=await fetch('islamic-extra.json',{cache:'no-cache'});if(!r.ok)return;const j=await r.json();
+ extra={add:(Array.isArray(j.add)?j.add:[]).filter(x=>x&&typeof x.stationuuid==='string'&&/^https:\/\//i.test(x.url||'')),hide:(Array.isArray(j.hide)?j.hide:[]).map(String)};
+ buildIsl();if(S.tab==='islamic')render();paint()}catch(e){}}
 async function loadIsl(force){
  if(islBusy)return;
- const c=store.get('isl',null);
- if(!force&&!islAll&&c&&c.secure===S.secure&&Array.isArray(c.list)){islAll=c.list;filterIsl();if(S.tab==='islamic')render()}
- if(!force&&islAll&&c&&c.secure===S.secure&&Date.now()-c.t<864e5)return;
+ const c=store.get('isl2',null);
+ if(!force&&!islAuto&&c&&c.secure===S.secure&&Array.isArray(c.list)){islAuto=c.list;buildIsl();if(S.tab==='islamic')render()}
+ if(!force&&islAuto&&c&&c.secure===S.secure&&Date.now()-c.t<864e5)return;
  islBusy=true;islErr=false;
  const best=new Map(),urls=new Set(),jobs=ISL_Q.slice();let done=0,fails=0;
  const add=s=>{
@@ -111,12 +131,13 @@ async function loadIsl(force){
  const work=async()=>{while(jobs.length){const[k,v]=jobs.shift();
   const p=new URLSearchParams({[k]:v,limit:'500',hidebroken:'true',order:'clickcount',reverse:'true'});if(S.secure)p.set('is_https','true');
   try{(await api('stations/search?'+p)).forEach(add)}catch(e){fails++}
-  done++;if(!islAll&&S.tab==='islamic')count(`Gathering Sunni Islamic stations… ${Math.round(done/ISL_Q.length*100)}%`)}};
- await Promise.all([work(),work(),work()]);
+  done++;if(!islAuto&&S.tab==='islamic')count(`Gathering Sunni Islamic stations… ${Math.round(done/ISL_Q.length*100)}%`)}};
+ await Promise.all([work(),work(),work(),work()]);
  islBusy=false;
- if(fails===ISL_Q.length){islErr=!islAll;if(S.tab==='islamic')render();return}
- const list=[...best.values()].map(s=>({...slim(s),k:sortKey(s)})).sort((a,b)=>coll.compare(a.k,b.k)).map(({k,...s})=>s);
- store.set('isl',{t:Date.now(),secure:S.secure,list});islAll=list;filterIsl();if(S.tab==='islamic')render();
+ if(fails===ISL_Q.length){islErr=!islAuto;if(S.tab==='islamic')render();return}
+ const list=[...best.values()].map(slim);
+ try{localStorage.removeItem('wr.isl')}catch(e){}
+ store.set('isl2',{t:Date.now(),secure:S.secure,list});islAuto=list;buildIsl();if(S.tab==='islamic')render();paint();
 }
 async function meta(){
  api('stats').then(st=>{$('#stat').textContent=`${fmt(st.stations)} stations · ${fmt(st.countries)} countries · ${fmt(st.languages)} languages`}).catch(()=>{$('#stat').textContent='Station directory is not reachable right now'});
@@ -207,7 +228,8 @@ function paint(){
  $$('.js-play').forEach(b=>{b.innerHTML=on?I.pause:I.play;b.setAttribute('aria-label',on?'Pause':'Play')});
  $$('.js-fav').forEach(b=>{b.innerHTML=I.star;b.classList.toggle('is',f);b.setAttribute('aria-label',f?'Remove from favorites':'Add to favorites')});
  try{if('mediaSession' in navigator)navigator.mediaSession.playbackState=on?'playing':'paused'}catch(e){}
- dockShow();if(!s)return;
+ dockShow();$('#islBtn').hidden=!s;if(!s)return;
+ $('#islBtn').textContent=inIsl(s)?'Remove from Islamic list':'Add to Islamic list';
  if(shown!==s.stationuuid){shown=s.stationuuid;
   $('#nName').textContent=nm(s);$('#dName').textContent=nm(s);
   $('#nSub').textContent=[s.country,cap(lang1(s)),quality(s),tagsOf(s).join(', ')].filter(Boolean).join(' · ');
@@ -236,6 +258,10 @@ $('#next').onclick=$('#dNext').onclick=()=>step(1);
 $('#prev').onclick=()=>step(-1);
 $('#nFav').onclick=$('#dFav').onclick=()=>fav(S.cur);
 $('#rand').onclick=surprise;
+$('#islBtn').onclick=()=>{const s=S.cur;if(!s)return;
+ if(inIsl(s)){islMine=islMine.filter(x=>x.stationuuid!==s.stationuuid);islHide.add(s.stationuuid);toast('Removed from your Islamic list')}
+ else{islHide.delete(s.stationuuid);if(!islMine.some(x=>x.stationuuid===s.stationuuid))islMine=[slim(s),...islMine];toast('Added to your Islamic list')}
+ store.set('islMine',islMine);store.set('islHide',[...islHide]);buildIsl();if(S.tab==='islamic')render();paint()};
 $('#copy').onclick=()=>{const u=S.cur&&(S.cur.url_resolved||S.cur.url);if(!u)return;try{navigator.clipboard.writeText(u).then(()=>toast('Stream link copied'),()=>toast(u))}catch(e){toast(u)}};
 $('#vol').oninput=e=>{au.volume=+e.target.value;store.set('vol',au.volume)};
 $('#list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=rows();
@@ -246,7 +272,7 @@ $('#form').addEventListener('submit',e=>{e.preventDefault();S.q=$('#q').value.tr
 $('#q').addEventListener('search',()=>{if(!$('#q').value&&S.q){S.q='';saveF();markChips();load(true)}});
 for(const k of['cc','lang','tag'])$('#'+k).addEventListener('change',e=>{S[k]=e.target.value;saveF();markChips();load(true)});
 $('#order').addEventListener('change',e=>{S.order=e.target.value;saveF();load(true)});
-$('#secure').addEventListener('change',e=>{S.secure=e.target.checked;saveF();load(true);refill();islAll=null;islView=[]});
+$('#secure').addEventListener('change',e=>{S.secure=e.target.checked;saveF();load(true);refill();islAuto=null;buildIsl()});
 $('#chips').innerHTML=CHIPS.map(([l],i)=>`<button class="chip" type="button" data-c="${i}">${l}</button>`).join('');
 $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)apply(CHIPS[+b.dataset.c][1])});
 const HASH={explore:'',islamic:'islamic',favs:'favorites',recent:'recent'};
@@ -279,5 +305,6 @@ $('#secHint').hidden=!WEB;$('#fc').textContent=favs.length||'';sync();paint();
 const last=store.get('last',null);
 if(last&&last.stationuuid){S.cur=last;S.queue=[last];S.idx=0;paint();setStatus('Tap play to pick up where you left off','idle')}
 {const h=location.hash.slice(1),t=Object.keys(HASH).find(k=>HASH[k]===h&&h);setTab(t||store.get('tab','explore'))}
-discover().then(()=>{meta();load(true);refill();if(S.tab==='islamic')loadIsl()});
+{const c=store.get('isl2',null);if(c&&c.secure===S.secure&&Array.isArray(c.list))islAuto=c.list;buildIsl();paint()}
+Promise.all([discover(),loadExtra()]).then(()=>{meta();load(true);refill();if(S.tab==='islamic')loadIsl()});
 }

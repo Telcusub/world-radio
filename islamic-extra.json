@@ -1,0 +1,20 @@
+{
+  "about": "Hand-picked Islamic stations for World Radio. Everything in 'add' always appears in the Islamic list. 'aka' holds other spellings for search. 'hide' takes station names or IDs to leave out of the list.",
+  "add": [
+    {
+      "stationuuid": "aya-handasat-al-quloob",
+      "name": "Handasat al-Quloob · هندسة القلوب",
+      "aka": "Handasa al Qulub, Handasat al Qulub, Handasat al Quloob, Hendasat al Qulub, Sheikh Muhammad al-Maqrami, Mohammed Al Maqrami, راديو الشيخ محمد المقرمي, إذاعة هندسة القلوب",
+      "about": "Sheikh Muhammad al-Maqrami · lectures",
+      "url": "https://s1.reliastream.com/proxy/almaqrami?mp=/stream",
+      "homepage": "https://www.m-almagrami.net/",
+      "country": "Yemen",
+      "countrycode": "YE",
+      "language": "arabic",
+      "tags": "islamic,lectures",
+      "codec": "MP3",
+      "bitrate": 96
+    }
+  ],
+  "hide": []
+}
