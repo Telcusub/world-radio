@@ -5,8 +5,8 @@ const store={get(k,d){try{const v=localStorage.getItem('wr.'+k);return v==null?d
 const fmt=n=>Number(n||0).toLocaleString();
 const cap=t=>t?t.charAt(0).toUpperCase()+t.slice(1):'';
 const I={
- play:'<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>',
- pause:'<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6.5 5h4v14h-4zM13.5 5h4v14h-4z" fill="currentColor"/></svg>',
+ play:'<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg>',
+ pause:'<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M6.5 5h4v14h-4zM13.5 5h4v14h-4z" fill="currentColor"/></svg>',
  star:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3.3l2.7 5.5 6 .9-4.4 4.2 1.1 6L12 17l-5.4 2.9 1.1-6-4.4-4.2 6-.9z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
 };
 const LIM=40,WEB=location.protocol==='https:';
@@ -57,7 +57,7 @@ const slim=s=>({stationuuid:s.stationuuid,name:s.name,aka:s.aka,about:s.about,ca
 const rows=()=>S.tab==='explore'?S.list:S.tab==='islamic'?islView:S.tab==='favs'?favs:recent;
 let tt=0;const toast=t=>{const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2800)};
 const count=t=>{$('#count').textContent=t};
-const setStatus=(t,k)=>{for(const el of[$('#nStatus'),$('#dStatus')]){el.className='sig '+k;el.querySelector('.t').textContent=t}};
+const setStatus=(t,k)=>{for(const el of[$('#nStatus'),$('#dStatus')]){el.className='sig '+k;el.querySelector('.t').textContent=t}$('#lamp').classList.toggle('on',k==='live');specLive=k==='live';specKick()};
 
 /* ---------- list rendering ---------- */
 const sub2=s=>s.about||(S.tab==='islamic'&&s.category?[s.category,...tagsOf(s)].join(' · '):tagsOf(s).join(', '));
@@ -207,7 +207,7 @@ au.addEventListener('pause',()=>{if(!switching&&!pending&&S.want&&!au.ended&&!au
  paint()}});
 /* Another app (video, call, voice note) took the sound while World Radio was in the background:
    phones don't let a web page restart sound from the background, so pick up as soon as you're back. */
-let resumeAfter=false;
+let resumeAfter=false;var specLive=false;
 function comeBack(){if(document.hidden||!resumeAfter||!S.cur||S.want)return;resumeAfter=false;S.want=true;S.tries=0;pending=false;paint();start()}
 document.addEventListener('visibilitychange',comeBack);window.addEventListener('focus',comeBack);window.addEventListener('pageshow',comeBack);
 setInterval(()=>{if(!S.want||switching||pending)return;const t=au.currentTime;if(!au.paused&&t>lastT+.05){lastT=t;stuck=0;return}if(++stuck>=4){stuck=0;fail()}},4000);
@@ -233,7 +233,7 @@ async function surprise(){
 }
 function fav(s){
  if(!s)return;const on=isFav(s);
- setFavs(on?favs.filter(f=>f.stationuuid!==s.stationuuid):[slim(s),...favs]);toast(on?'Removed from favorites':'Saved to favorites');
+ setFavs(on?favs.filter(f=>f.stationuuid!==s.stationuuid):[...favs,slim(s)]);{const n=favs.findIndex(f=>f.stationuuid===s.stationuuid)+1;toast(on?'Removed from favorites':n&&n<=8?`Saved to preset ${n}`:'Saved to favorites')}
  if(S.tab==='favs')render();else{$$('.st').forEach(li=>{if(li.dataset.u===s.stationuuid){const b=li.querySelector('.star');b.classList.toggle('is',!on);b.setAttribute('aria-label',(on?'Add to':'Remove from')+' favorites')}});if(S.tab==='islamic')islMeta()}
  paint();
 }
@@ -249,17 +249,18 @@ const lonOf=s=>{const g=parseFloat(s.geo_long);if(Number.isFinite(g)&&g!==0&&Mat
 let rxVis=true;const dockShow=()=>$('#dock').classList.toggle('show',!rxVis&&!!S.cur);
 function paint(){
  const s=S.cur,on=S.want,f=isFav(s);
- $$('.js-play').forEach(b=>{b.innerHTML=on?I.pause:I.play;b.setAttribute('aria-label',on?'Pause':'Play')});
+ $$('.js-play').forEach(b=>{b.innerHTML=on?I.pause:I.play;b.setAttribute('aria-label',on?'Pause':'Play');b.classList.toggle('on',on)});
+ $('#playLbl').textContent=on?'Pause':'Play';$('#lcd').classList.toggle('idle',!on);renderPresets();
  $$('.js-fav').forEach(b=>{b.innerHTML=I.star;b.classList.toggle('is',f);b.setAttribute('aria-label',f?'Remove from favorites':'Add to favorites')});
  try{if('mediaSession' in navigator)navigator.mediaSession.playbackState=on?'playing':'paused'}catch(e){}
  dockShow();$('#islBtn').hidden=!s;if(!s)return;
  $('#islBtn').textContent=inIsl(s)?'Remove from Islamic list':'Add to Islamic list';
  if(shown!==s.stationuuid){shown=s.stationuuid;
-  $('#nName').textContent=nm(s);$('#dName').textContent=nm(s);
-  $('#nSub').textContent=[s.country,cap(lang1(s)),quality(s),tagsOf(s).join(', ')].filter(Boolean).join(' · ');
-  for(const el of[$('#nLogo'),$('#dLogo')]){el.style.setProperty('--h',`hsl(${hue(s)} 46% 36%)`);el.innerHTML=logoIn(s)}
+  const n=nm(s),mq=$('#nName');mq.textContent=`${n} · ${n} · `;mq.style.animationDuration=Math.max(10,n.length*.5)+'s';$('#dName').textContent=n;
+  $('#nSub').textContent=[quality(s)||'Stream',cap(lang1(s))].filter(Boolean).join(' · ');
+  {const el=$('#dLogo');el.style.setProperty('--h',`hsl(${hue(s)} 46% 36%)`);el.innerHTML=logoIn(s)}
   const L=lonOf(s),nd=$('#needle');nd.style.left=L?((L[0]+180)/360*100)+'%':'50%';nd.classList.toggle('lost',!L);
-  $('#dcap').textContent=L?`${s.country||'Tuned in'} · ${L[1]?'about ':''}${Math.round(Math.abs(L[0]))}°${L[0]<0?'W':'E'}`:'Location not listed for this station';
+  $('#dcap').textContent=[s.countrycode||s.country||'',L?`${L[1]?'~':''}${Math.abs(L[0]).toFixed(1)}°${L[0]<0?'W':'E'}`:''].filter(Boolean).join(' · ');
   const w=$('#nWeb'),hp=s.homepage||'';if(/^https?:\/\//i.test(hp)){w.href=hp;w.hidden=false}else w.hidden=true;
   $('#copy').hidden=!(s.url_resolved||s.url);
   document.title=nm(s)+' · World Radio';
@@ -269,9 +270,8 @@ function paint(){
 const dial=$('#dial');
 function drawDial(){
  const W=dial.clientWidth,H=dial.clientHeight;if(!W)return;const x=l=>((l+180)/360*W).toFixed(1);let g='';
- for(let l=-180;l<=180;l+=5){const M=l%30===0;g+=`<line x1="${x(l)}" x2="${x(l)}" y1="${H-(M?22:12)}" y2="${H-5}" stroke="currentColor" stroke-opacity="${M?.8:.4}" stroke-width="${M?1.5:1}"/>`}
- [[-98,'Americas'],[14,W<520?'Eur · Africa':'Europe · Africa'],[92,'Asia'],[150,'Oceania']].forEach(([l,t])=>g+=`<text x="${x(l)}" y="21" text-anchor="middle" fill="currentColor" font-size="13" font-family="Righteous, Archivo, sans-serif">${t}</text>`);
- if(W>=520)[-120,-60,0,60,120].forEach(l=>g+=`<text x="${x(l)}" y="${H-28}" text-anchor="middle" fill="currentColor" fill-opacity=".65" font-size="11" font-weight="600">${Math.abs(l)}°${l<0?' W':l>0?' E':''}</text>`);
+ for(let l=-180;l<=180;l+=5){const M=l%30===0;g+=`<line x1="${x(l)}" x2="${x(l)}" y1="${H-(M?13:8)}" y2="${H-1}" stroke="currentColor" stroke-opacity="${M?.75:.4}" stroke-width="${M?1.4:1}"/>`}
+ [[-98,'AMERICAS'],[14,W<360?'EUR · AFR':'EUROPE · AFRICA'],[92,'ASIA'],[150,'PACIFIC']].forEach(([l,t])=>g+=`<text x="${x(l)}" y="11" text-anchor="middle" fill="currentColor" font-size="10" font-family="'Share Tech Mono', monospace">${t}</text>`);
  dial.innerHTML=g;
 }
 const dro=new ResizeObserver(drawDial);dro.observe(dial);
@@ -288,7 +288,6 @@ $('#islBtn').onclick=()=>{const s=S.cur;if(!s)return;
  store.set('islMine',islMine);store.set('islHide',[...islHide]);buildIsl();if(S.tab==='islamic')render();paint()};
 $('#copy').onclick=()=>{const u=S.cur&&(S.cur.url_resolved||S.cur.url);if(!u)return;try{navigator.clipboard.writeText(u).then(()=>toast('Stream link copied'),()=>toast(u))}catch(e){toast(u)}};
 $('#resume').checked=store.get('resume',true);$('#resume').onchange=e=>{store.set('resume',e.target.checked);if(!e.target.checked)resumeAfter=false};
-$('#vol').oninput=e=>{au.volume=+e.target.value;store.set('vol',au.volume)};
 $('#list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=rows();
  if(b.dataset.f!=null)return fav(r[+b.dataset.f]);
  if(b.dataset.i!=null){const i=+b.dataset.i,s=r[i];if(!s)return;if(S.cur&&S.cur.stationuuid===s.stationuuid&&S.want)return;if(S.cur&&S.cur.stationuuid===s.stationuuid)return toggle();play(s,r,i)}});
@@ -316,7 +315,7 @@ $('#icc').addEventListener('change',e=>{islCC=e.target.value;filterIsl();render(
 $('#starAll').addEventListener('click',()=>{
  const v=islView;if(!v.length)return;const on=v.every(isFav);
  if(on){const drop=new Set(v.map(s=>s.stationuuid));setFavs(favs.filter(f=>!drop.has(f.stationuuid)));toast(`Removed ${fmt(v.length)} stations from favorites`)}
- else{const add=v.filter(s=>!isFav(s)).map(slim);setFavs([...add,...favs]);toast(`Starred ${fmt(add.length)} stations`)}
+ else{const add=v.filter(s=>!isFav(s)).map(slim);setFavs([...favs,...add]);toast(`Starred ${fmt(add.length)} stations`)}
  render();paint();
 });
 $('#more').onclick=()=>load(false);
@@ -327,7 +326,81 @@ document.addEventListener('keydown',e=>{if(e.target.closest('input,select,textar
 
 document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&t.closest('.logo'))t.remove()},true);
 
+/* ---------- presets: your first eight favorites ---------- */
+function renderPresets(){
+ const cur=S.cur&&S.cur.stationuuid;let curN=0;
+ $('#presets').innerHTML=Array.from({length:8},(_,i)=>{const s=favs[i];
+  if(!s)return `<button class="key pre empty" type="button" data-p="${i}" aria-label="Preset ${i+1}, empty: tap to save the station that is playing"><span class="n">${i+1}</span><span class="nm">Empty · tap to save</span><i></i></button>`;
+  const c=s.stationuuid===cur;if(c)curN=i+1;
+  return `<button class="key pre${c?' cur':''}" type="button" data-p="${i}" aria-label="Preset ${i+1}, ${esc(nm(s))}"><span class="n">${i+1}</span><span class="nm">${esc(nm(s))}</span><i></i></button>`}).join('');
+ $('#lcdPre').textContent=curN?'Preset '+curN:'Preset –';
+}
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('.pre');if(!b)return;const i=+b.dataset.p,s=favs[i];
+ if(s){if(S.cur&&S.cur.stationuuid===s.stationuuid)return toggle();return play(s,favs,i)}
+ if(!S.cur)return toast('Play a station first, then tap an empty preset to save it');
+ if(isFav(S.cur))return toast(`Already saved as favorite ${favs.findIndex(x=>x.stationuuid===S.cur.stationuuid)+1}`);
+ fav(S.cur)});
+
+/* ---------- clock with unlit segments ---------- */
+const SEG={0:'abcdef',1:'bc',2:'abged',3:'abgcd',4:'fgbc',5:'afgcd',6:'afgedc',7:'abc',8:'abcdefg',9:'abcfgd'};
+{const d='<div class="dg">'+'abcdefg'.split('').map(k=>`<b class="sg s-${k} ${'agd'.includes(k)?'sh':'sv'}" data-k="${k}"></b>`).join('')+'</div>';
+ $('#digits').innerHTML=d+d+'<div class="colon"><b></b><b></b></div>'+d+d}
+const dgs=$$('#digits .dg');
+const setDigit=(el,v)=>el.querySelectorAll('.sg').forEach(x=>x.classList.toggle('on',v!=null&&SEG[v].includes(x.dataset.k)));
+function tick(){
+ const d=new Date(),h=d.getHours(),m=d.getMinutes(),h12=h%12||12;
+ setDigit(dgs[0],h12>=10?1:null);setDigit(dgs[1],h12%10);setDigit(dgs[2],Math.floor(m/10));setDigit(dgs[3],m%10);
+ $('#digits .colon').classList.toggle('dim',d.getSeconds()%2===1);
+ $('#ampm').textContent=h<12?'AM':'PM';
+ $('#date').textContent=d.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}).replace(/,/g,'');
+ sleepTick();
+}
+
+/* ---------- level blocks (a visual effect: most stations don't let pages read their sound) ---------- */
+$('#spec').innerHTML=Array.from({length:16},()=>'<div>'+'<b></b>'.repeat(8)+'</div>').join('');
+const specCols=$$('#spec div').map(c=>[...c.children]);
+let lv=Array(16).fill(0),pk=Array(16).fill(0),specT=0;
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
+function specDraw(){specCols.forEach((cells,i)=>{const on=Math.round(lv[i]*8),p=Math.ceil(pk[i]*8);cells.forEach((b,r)=>{const l=8-r;b.className=l<=on?'on':(l===p&&p>0?'pk':'')})})}
+function specStep(){
+ const live=specLive&&!document.hidden;
+ lv=lv.map((v,i)=>live?Math.max(.06,Math.min(1,v*.45+(.88-i*.04)*(.4+Math.random()*.7)*.55)):v*.8);
+ pk=pk.map((p,i)=>Math.max(lv[i],p-.05));
+ specDraw();
+ if(!live&&pk.every(p=>p<.02)){clearInterval(specT);specT=0}
+}
+function specKick(){if(reduceMotion.matches){lv=lv.map((_,i)=>specLive?.3+.5*(1-i/16):0);pk=lv.slice();specDraw();return}if(!specT)specT=setInterval(specStep,140)}
+document.addEventListener('visibilitychange',specKick);
+
+/* ---------- SLEEP: stop after 15, 30, 60 or 90 minutes ---------- */
+const SLEEPS=[0,15,30,60,90];let sleepIdx=0,sleepEnd=0;
+function sleepUI(){const m=SLEEPS[sleepIdx];$('#sleepLbl').textContent=m?`Sleep ${m}`:'Sleep';$('#kSleep').classList.toggle('lit',!!m);
+ $('#kSleep').setAttribute('aria-label',m?`Sleep timer: ${m} minutes, tap to change`:'Sleep timer: off, tap to set');if(!m)$('#sleepTxt').textContent=''}
+function sleepTick(){if(!sleepEnd)return;const left=sleepEnd-Date.now();
+ if(left<=0){sleepEnd=0;sleepIdx=0;sleepUI();if(S.want){stop();setStatus('Sleep timer: good night','idle')}toast('Sleep timer ended');return}
+ $('#sleepTxt').textContent='Sleep '+Math.ceil(left/60000)+'m'}
+$('#kSleep').onclick=()=>{sleepIdx=(sleepIdx+1)%SLEEPS.length;const m=SLEEPS[sleepIdx];sleepEnd=m?Date.now()+m*60000:0;sleepUI();sleepTick();toast(m?`Sleep timer: ${m} minutes`:'Sleep timer off')};
+
+/* ---------- LIGHT: green or amber backlight ---------- */
+function setLight(v,say){document.documentElement.dataset.light=v;store.set('light',v);
+ $('#kLight').setAttribute('aria-label',`Backlight: ${v==='amber'?'amber':'green'}, tap to switch`);if(say)toast(v==='amber'?'Amber backlight':'Green backlight')}
+setLight(store.get('light','lime')==='amber'?'amber':'lime');
+$('#kLight').onclick=()=>setLight(document.documentElement.dataset.light==='amber'?'lime':'amber',true);
+
+/* ---------- volume: iPhone keeps volume on its own buttons ---------- */
+const volOK=(()=>{try{const a=new Audio();a.volume=.5;return Math.abs(a.volume-.5)<.01}catch(e){return false}})();
+function volUI(){const v=volOK?au.volume:1;$('#vols').innerHTML=Array.from({length:10},(_,i)=>`<b class="${i<Math.round(v*10)?'on':''}"></b>`).join('');$('#vol').style.setProperty('--p',(v*100)+'%')}
+if(!volOK){$('#fader').hidden=true;$('.fn').insertAdjacentHTML('beforeend','<span class="lbl" style="align-self:center;margin:0 0 0 auto">Volume: phone buttons</span>')}
+$('#vol').oninput=e=>{au.volume=+e.target.value;store.set('vol',au.volume);volUI()};
+volUI();
+
+/* ---------- nameplate, search and Islamic keys ---------- */
+$('#home').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+$('#kSearch').onclick=()=>{setTab('explore');$('#q').focus({preventScroll:true});$('.tabs').scrollIntoView({behavior:'smooth',block:'start'})};
+$('#kIsl').onclick=()=>{setTab('islamic');$('.tabs').scrollIntoView({behavior:'smooth',block:'start'})};
+
 /* ---------- start ---------- */
+setInterval(tick,1000);tick();sleepUI();
 $('#secHint').hidden=!WEB;$('#fc').textContent=favs.length||'';sync();paint();
 const last=store.get('last',null);
 if(last&&last.stationuuid){S.cur=last;S.queue=[last];S.idx=0;paint();setStatus('Tap play to pick up where you left off','idle')}

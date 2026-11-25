@@ -11,7 +11,7 @@ Open the app: https://telcusub.github.io/world-radio/
 - "Add to Islamic list" under the dial adds or removes the playing station on your own device
 - Reconnects by itself if a stream drops, and moves to the next station if one is off air
 - Resumes by itself when you come back after another app (video, call, voice note) took over the sound; phones don't let web pages restart sound while you are in another app
-- Retro 1960s transistor-radio design, light and dark; fonts Archivo and Righteous (SIL OFL) are served from this repository
+- 1980s Japanese clock-radio design: backlit LCD (green or amber, LIGHT key) with segment clock, level blocks and a tuning needle; glowing keys; 8 presets from your first 8 favorites; SLEEP timer (15/30/60/90 min); fonts Chakra Petch, Share Tech Mono and Audiowide (SIL OFL) are served from this repository
 - Favorites and recently played stations are saved on your device
 - Station directory from [Radio Browser](https://www.radio-browser.info), a free community database
 
