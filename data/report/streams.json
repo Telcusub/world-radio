@@ -48,7 +48,7 @@
    "category": "Quran",
    "streams": [
     {
-     "url": "http://n0e.radiojar.com/0tpy1h0kxtzuv?rj-ttl=5&rj-tok=AAABohSu6NcAfpEnFDhr2zFR_g",
+     "url": "http://n0e.radiojar.com/0tpy1h0kxtzuv?rj-ttl=5&rj-tok=AAABohZfZbUA9pMNGctfmqFYrQ",
      "type": "audio/mpeg",
      "https": false,
      "found_on": "https://makkahlive.net/en/radio/quran-saudi"
@@ -76,13 +76,13 @@
    "category": "Quran",
    "streams": [
     {
-     "url": "http://n0d.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohSvBkgAB18W41aEJwgD4Q",
+     "url": "http://n0e.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohZfhLYAWcFeyofft4_coQ",
      "type": "audio/mpeg",
      "https": false,
      "found_on": "direct test"
     },
     {
-     "url": "http://n0c.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohSvCrMAGlcIVd0QzKntTg",
+     "url": "http://n0b.radiojar.com/8s5u5tpdtwzuv?rj-ttl=5&rj-tok=AAABohZfiIoA_PvwLXY41B9xdA",
      "type": "audio/mpeg",
      "https": false,
      "found_on": "direct test"
@@ -123,6 +123,88 @@
      "found_on": "direct test"
     }
    ],
+   "notes": []
+  },
+  {
+   "name": "Qiblaten FM 103.6",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "tunein match: Qiblaten FM (s145818) Sauti ya Hekima",
+    "tunein s145818 http://s36.myradiostream.com:20772/: error: URLError"
+   ]
+  },
+  {
+   "name": "Radio Nuur FM 94",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "tunein s341746 https://s2.myradiostream.com:5626/listen.mp3: error: URLError"
+   ]
+  },
+  {
+   "name": "Sauti ya Quran FM",
+   "countrycode": "TZ",
+   "category": "Quran",
+   "streams": [],
+   "notes": [
+    "tunein match: SAUTI YA QURAN FM (s349660) MUONGOZO KWA JAMII",
+    "tunein s349660 https://stream.zeno.fm/igtk1anecmcvv: error: HTTPError"
+   ]
+  },
+  {
+   "name": "Radio Imaan FM 96.3",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": [
+    "https://radioimaan.co.tz/: URLError"
+   ]
+  },
+  {
+   "name": "Radio Al Noor 93.3",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [
+    {
+     "url": "http://edge.mixlr.com/channel/boaht",
+     "type": "audio/mp3",
+     "https": false,
+     "found_on": "tunein s287697"
+    }
+   ],
+   "notes": [
+    "tunein match: NOOR AL EMAN FM (s287697) هي إحدى المقاصد العلمية..."
+   ]
+  },
+  {
+   "name": "Radio Maarifa 105.3",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": []
+  },
+  {
+   "name": "Radio Ihsaan",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": []
+  },
+  {
+   "name": "Radio Hidaya 94.5",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [],
+   "notes": []
+  },
+  {
+   "name": "Radio Adhana",
+   "countrycode": "TZ",
+   "category": "Islamic talk",
+   "streams": [],
    "notes": []
   }
  ],
