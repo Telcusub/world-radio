@@ -293,6 +293,7 @@ $('#islBtn').onclick=()=>{const s=S.cur;if(!s)return;
  else{islHide.delete(s.stationuuid);if(!islMine.some(x=>x.stationuuid===s.stationuuid))islMine=[slim(s),...islMine];toast('Added to your Islamic list')}
  store.set('islMine',islMine);store.set('islHide',[...islHide]);buildIsl();if(S.tab==='islamic')render();paint()};
 $('#copy').onclick=()=>{const u=S.cur&&(S.cur.url_resolved||S.cur.url);if(!u)return;try{navigator.clipboard.writeText(u).then(()=>toast('Stream link copied'),()=>toast(u))}catch(e){toast(u)}};
+$('#waveMove').checked=store.get('waveMove',true);$('#waveMove').onchange=e=>{store.set('waveMove',e.target.checked);waveKick()};
 $('#resume').checked=store.get('resume',true);$('#resume').onchange=e=>{store.set('resume',e.target.checked);if(!e.target.checked)resumeAfter=false};
 $('#list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=rows();
  if(b.dataset.f!=null)return fav(r[+b.dataset.f]);
@@ -393,14 +394,13 @@ function tick(){
 }
 
 /* ---------- silk waveform on the display (a visual effect: reading a stream's real sound would stop
-   background playback on iPhone, so the wave follows the player's state: live, tuning or paused) ---------- */
-const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
+   background playback on iPhone, so the wave follows the player's state: live, tuning or paused).
+   It moves even when the phone's Reduce Motion is on; INFO › "Moving wave" holds it still. ---------- */
 function waveInit(){
  const cv=$('#wave'),ctx=cv&&cv.getContext&&cv.getContext('2d');if(!ctx)return;
  wv={cv,ctx,raf:0,last:0,t:Math.random()*60,env:.03,target:.03,next:0,ink:'',frames:0};
  waveInk();
  if(window.ResizeObserver)new ResizeObserver(waveSize).observe(cv);else addEventListener('resize',waveSize);
- if(reduceMotion.addEventListener)reduceMotion.addEventListener('change',waveKick);else if(reduceMotion.addListener)reduceMotion.addListener(waveKick);
  document.addEventListener('visibilitychange',waveKick);
  waveSize();waveKick();
 }
@@ -439,7 +439,7 @@ function waveStep(now){
 }
 function waveKick(){
  if(!wv)return;
- if(reduceMotion.matches){if(wv.raf){cancelAnimationFrame(wv.raf);wv.raf=0}wv.last=0;wv.t=1.3;wv.env=waveMode==='live'?.55:waveMode==='tune'?.16:.03;waveDraw();return}
+ if(!$('#waveMove').checked){if(wv.raf){cancelAnimationFrame(wv.raf);wv.raf=0}wv.last=0;wv.t=1.3;wv.env=waveMode==='live'?.55:waveMode==='tune'?.16:.03;waveDraw();return}
  if(!waveVisible()){if(wv.raf){cancelAnimationFrame(wv.raf);wv.raf=0}wv.last=0;return}
  if(!wv.raf)wv.raf=requestAnimationFrame(waveStep);
 }
