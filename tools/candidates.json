@@ -1,13 +1,188 @@
 [
-  {"name": "Revive FM 94.0", "countrycode": "GB", "category": "Islamic talk", "pages": ["https://revivefm.co.uk/", "https://www.revivefm.co.uk/"]},
-  {"name": "Radio Al-Ansaar", "countrycode": "ZA", "category": "Islamic talk", "pages": ["https://alansaar.org.za/", "https://radioalansaar.org.za/"]},
-  {"name": "Markaz Sahaba", "countrycode": "ZA", "category": "Lectures & dawah", "pages": ["https://markazsahaba.com/", "https://www.markazsahaba.com/"]},
-  {"name": "Muslim Community Radio 2MFM", "countrycode": "AU", "category": "Islamic talk", "pages": ["https://2mfm.org.au/", "https://www.2mfm.org.au/"]},
-  {"name": "Miraath Radio", "countrycode": "SA", "category": "Lectures & dawah", "pages": ["https://miraath.net/radio", "https://www.miraath.net/en/"]},
-  {"name": "Saudi Quran Radio (Riyadh)", "countrycode": "SA", "category": "Quran", "pages": ["https://makkahlive.net/en/radio/quran-saudi"]},
-  {"name": "Sharjah Quran Radio", "countrycode": "AE", "category": "Quran", "pages": ["https://makkahlive.net/en/radio/quran-sharjah"]},
-  {"name": "Cairo Quran Radio", "countrycode": "EG", "category": "Quran", "streams": ["https://stream.radiojar.com/8s5u5tpdtwzuv", "https://n0d.radiojar.com/8s5u5tpdtwzuv"], "pages": ["https://makkahlive.net/en/radio/quran-cairo"]},
-  {"name": "Nablus Quran Radio", "countrycode": "PS", "category": "Quran", "pages": ["https://makkahlive.net/en/radio/quran-nablus"]},
-  {"name": "Sunnah Radio", "countrycode": "SA", "category": "Lectures & dawah", "pages": ["https://makkahlive.net/en/radio/sunnah"]},
-  {"name": "Radio Islam International", "countrycode": "ZA", "category": "Islamic talk", "streams": ["https://cast1.my-control-panel.com/proxy/netmoham/radioislam.mp3"]}
+ {
+  "name": "Revive FM 94.0",
+  "countrycode": "GB",
+  "category": "Islamic talk",
+  "pages": [
+   "https://revivefm.co.uk/",
+   "https://www.revivefm.co.uk/"
+  ]
+ },
+ {
+  "name": "Radio Al-Ansaar",
+  "countrycode": "ZA",
+  "category": "Islamic talk",
+  "pages": [
+   "https://alansaar.org.za/",
+   "https://radioalansaar.org.za/"
+  ]
+ },
+ {
+  "name": "Markaz Sahaba",
+  "countrycode": "ZA",
+  "category": "Lectures & dawah",
+  "pages": [
+   "https://markazsahaba.com/",
+   "https://www.markazsahaba.com/"
+  ]
+ },
+ {
+  "name": "Muslim Community Radio 2MFM",
+  "countrycode": "AU",
+  "category": "Islamic talk",
+  "pages": [
+   "https://2mfm.org.au/",
+   "https://www.2mfm.org.au/"
+  ]
+ },
+ {
+  "name": "Miraath Radio",
+  "countrycode": "SA",
+  "category": "Lectures & dawah",
+  "pages": [
+   "https://miraath.net/radio",
+   "https://www.miraath.net/en/"
+  ]
+ },
+ {
+  "name": "Saudi Quran Radio (Riyadh)",
+  "countrycode": "SA",
+  "category": "Quran",
+  "pages": [
+   "https://makkahlive.net/en/radio/quran-saudi"
+  ]
+ },
+ {
+  "name": "Sharjah Quran Radio",
+  "countrycode": "AE",
+  "category": "Quran",
+  "pages": [
+   "https://makkahlive.net/en/radio/quran-sharjah"
+  ]
+ },
+ {
+  "name": "Cairo Quran Radio",
+  "countrycode": "EG",
+  "category": "Quran",
+  "streams": [
+   "https://stream.radiojar.com/8s5u5tpdtwzuv",
+   "https://n0d.radiojar.com/8s5u5tpdtwzuv"
+  ],
+  "pages": [
+   "https://makkahlive.net/en/radio/quran-cairo"
+  ]
+ },
+ {
+  "name": "Nablus Quran Radio",
+  "countrycode": "PS",
+  "category": "Quran",
+  "pages": [
+   "https://makkahlive.net/en/radio/quran-nablus"
+  ]
+ },
+ {
+  "name": "Sunnah Radio",
+  "countrycode": "SA",
+  "category": "Lectures & dawah",
+  "pages": [
+   "https://makkahlive.net/en/radio/sunnah"
+  ]
+ },
+ {
+  "name": "Radio Islam International",
+  "countrycode": "ZA",
+  "category": "Islamic talk",
+  "streams": [
+   "https://cast1.my-control-panel.com/proxy/netmoham/radioislam.mp3"
+  ]
+ },
+ {
+  "name": "Qiblaten FM 103.6",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein": [
+   "s145818"
+  ],
+  "tunein_search": [
+   "qiblaten"
+  ]
+ },
+ {
+  "name": "Radio Nuur FM 94",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein": [
+   "s341746"
+  ]
+ },
+ {
+  "name": "Sauti ya Quran FM",
+  "countrycode": "TZ",
+  "category": "Quran",
+  "tunein_search": [
+   "sauti ya quran"
+  ]
+ },
+ {
+  "name": "Radio Imaan FM 96.3",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein_search": [
+   "radio imaan"
+  ],
+  "pages": [
+   "https://streema.com/radios/Radio_Imaan_FM",
+   "http://www.islamicftz.org/",
+   "https://radioimaan.co.tz/"
+  ]
+ },
+ {
+  "name": "Radio Al Noor 93.3",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein_search": [
+   "al noor 93"
+  ],
+  "pages": [
+   "https://streema.com/radios/Radio_Al_Noor"
+  ]
+ },
+ {
+  "name": "Radio Maarifa 105.3",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein_search": [
+   "maarifa"
+  ],
+  "pages": [
+   "https://streema.com/radios/Radio_Maarifa"
+  ]
+ },
+ {
+  "name": "Radio Ihsaan",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein_search": [
+   "ihsaan"
+  ]
+ },
+ {
+  "name": "Radio Hidaya 94.5",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein_search": [
+   "hidaya"
+  ],
+  "pages": [
+   "https://streema.com/radios/Radio_Hidaya"
+  ]
+ },
+ {
+  "name": "Radio Adhana",
+  "countrycode": "TZ",
+  "category": "Islamic talk",
+  "tunein_search": [
+   "adhana"
+  ]
+ }
 ]

@@ -71,8 +71,53 @@ def same_site_live_links(html, base):
     return list(dict.fromkeys(out))[:6]
 
 
+TUNE = "https://opml.radiotime.com/Tune.ashx?id={}&render=json&formats=mp3,aac,ogg,hls"
+SEARCH = "https://opml.radiotime.com/Search.ashx?query={}&render=json&types=station"
+
+
+def tunein_ids(c, notes):
+    """TuneIn station ids from the candidate: given ids ("s145818") and search queries."""
+    ids = [i for i in c.get("tunein", []) if re.fullmatch(r"s\d+", i)]
+    for q in c.get("tunein_search", []):
+        try:
+            _, _, body = fetch(SEARCH.format(urllib.parse.quote(q)))
+            items = json.loads(body.decode("utf-8", "ignore")).get("body", [])
+        except Exception as e:
+            notes.append(f"tunein search {q}: {type(e).__name__}")
+            continue
+        words = [w for w in re.findall(r"\w+", q.lower()) if len(w) > 2]
+        for it in items:
+            gid, text = it.get("guide_id", ""), it.get("text", "")
+            if gid.startswith("s") and all(w in text.lower() for w in words):
+                notes.append(f"tunein match: {text} ({gid}) {it.get('subtext', '')}")
+                ids.append(gid)
+    return list(dict.fromkeys(ids))[:4]
+
+
+def tunein_streams(gid, notes):
+    out = []
+    try:
+        _, _, body = fetch(TUNE.format(gid))
+        items = json.loads(body.decode("utf-8", "ignore")).get("body", [])
+    except Exception as e:
+        notes.append(f"tunein {gid}: {type(e).__name__}")
+        return out
+    for it in items[:4]:
+        u = it.get("url", "")
+        if not u:
+            continue
+        ok, ctype, f = probe(u)
+        if ok:
+            out.append({"url": f, "type": ctype, "https": f.lower().startswith("https://"), "found_on": f"tunein {gid}"})
+        else:
+            notes.append(f"tunein {gid} {u}: {ctype}")
+    return out
+
+
 def search_station(c):
     tried, streams, notes = set(), [], []
+    for gid in tunein_ids(c, notes):
+        streams += tunein_streams(gid, notes)
     for u in c.get("streams", []):
         tried.add(u)
         ok, ctype, f = probe(u)
@@ -105,8 +150,9 @@ def search_station(c):
         pages = nxt
         if streams:
             break
+    streams = list({x["url"]: x for x in streams}.values())
     return {"name": c["name"], "countrycode": c.get("countrycode", ""), "category": c.get("category", ""),
-            "streams": streams[:5], "notes": notes[:5]}
+            "streams": streams[:6], "notes": notes[:10]}
 
 
 def main():
