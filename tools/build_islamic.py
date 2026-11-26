@@ -20,7 +20,7 @@ Taxonomy (same rules as the app's Islamic tab):
   Islamic talk     other Muslim and Islamic stations
 Stations marked Shia or Ahmadi, and stations from Iran, are left out.
 """
-import collections, datetime, gzip, json, os, random, re, sys, urllib.request
+import time, collections, datetime, gzip, json, os, random, re, sys, urllib.request
 
 UA = "WorldRadio/1.0 (+https://github.com/Telcusub/world-radio)"
 OUT = os.path.join(os.path.dirname(__file__), "..", "data")
@@ -117,14 +117,17 @@ def servers():
         names = [s["name"] for s in get_json("https://all.api.radio-browser.info/json/servers", 30) if s.get("name")]
         names = sorted(set(names))
         random.shuffle(names)
-        return names or FALLBACK
+        return names + [h for h in FALLBACK if h not in names]
     except Exception as e:
         print("server list failed:", e)
         return FALLBACK
 
 
 def all_stations():
-    for host in servers():
+    hosts = servers()
+    for attempt, host in enumerate(hosts + hosts):
+        if attempt == len(hosts):
+            time.sleep(30)
         try:
             data = get_json(f"https://{host}/json/stations?hidebroken=true&limit=200000")
             print(f"directory: {len(data)} stations from {host}")
