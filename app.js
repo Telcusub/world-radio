@@ -58,7 +58,7 @@ const slim=s=>({stationuuid:s.stationuuid,name:s.name,aka:s.aka,about:s.about,ca
 const rows=()=>S.tab==='explore'?S.list:S.tab==='islamic'?islView:S.tab==='favs'?favs:recent;
 let tt=0;const toast=t=>{const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2800)};
 const count=t=>{$('#count').textContent=t};
-const setStatus=(t,k)=>{for(const el of[$('#nStatus'),$('#dStatus')]){el.className='sig '+k;el.querySelector('.t').textContent=t}$('#lamp').classList.toggle('on',k==='live');specLive=k==='live';specKick()};
+const setStatus=(t,k)=>{for(const el of[$('#nStatus'),$('#dStatus')]){el.className='sig '+k;el.querySelector('.t').textContent=t}$('#lamp').classList.toggle('on',k==='live');waveMode=k==='live'?'live':k==='wait'?'tune':'idle';waveKick()};
 
 /* ---------- list rendering ---------- */
 const sub2=s=>s.about||(S.tab==='islamic'&&s.category?[s.category,...tagsOf(s)].join(' · '):tagsOf(s).join(', '));
@@ -213,7 +213,7 @@ au.addEventListener('pause',()=>{if(!switching&&!pending&&S.want&&!au.ended&&!au
  paint()}});
 /* Another app (video, call, voice note) took the sound while World Radio was in the background:
    phones don't let a web page restart sound from the background, so pick up as soon as you're back. */
-let resumeAfter=false;var specLive=false;
+let resumeAfter=false;var waveMode='idle',wv=null;
 function comeBack(){if(document.hidden||!resumeAfter||!S.cur||S.want)return;resumeAfter=false;S.want=true;S.tries=0;pending=false;paint();start()}
 document.addEventListener('visibilitychange',comeBack);window.addEventListener('focus',comeBack);window.addEventListener('pageshow',comeBack);
 setInterval(()=>{if(!S.want||switching||pending)return;const t=au.currentTime;if(!au.paused&&t>lastT+.05){lastT=t;stuck=0;return}if(++stuck>=4){stuck=0;fail()}},4000);
@@ -315,7 +315,7 @@ function setView(v){
  if(v!=='radio'){S.tab=v;store.set('tab',v);$('#finder').hidden=v!=='explore';$('#isl').hidden=v!=='islamic';$('#islHint').hidden=v!=='islamic';
   render();if(v==='islamic')loadIsl();if(changed)$('#scroller').scrollTop=0}
  try{history.replaceState(null,'',location.pathname+location.search+(HASH[v]?'#'+HASH[v]:''))}catch(e){}
- dockShow();if(v==='radio')requestAnimationFrame(fitRadio);
+ dockShow();if(v==='radio')requestAnimationFrame(fitRadio);waveKick();
 }
 $$('.nav').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
 window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);const v=Object.keys(HASH).find(k=>HASH[k]===h);if(v&&v!==view)setView(v)});
@@ -392,21 +392,58 @@ function tick(){
  sleepTick();
 }
 
-/* ---------- level blocks (a visual effect: most stations don't let pages read their sound) ---------- */
-$('#spec').innerHTML=Array.from({length:16},()=>'<div>'+'<b></b>'.repeat(8)+'</div>').join('');
-const specCols=$$('#spec div').map(c=>[...c.children]);
-let lv=Array(16).fill(0),pk=Array(16).fill(0),specT=0;
+/* ---------- silk waveform on the display (a visual effect: reading a stream's real sound would stop
+   background playback on iPhone, so the wave follows the player's state: live, tuning or paused) ---------- */
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
-function specDraw(){specCols.forEach((cells,i)=>{const on=Math.round(lv[i]*8),p=Math.ceil(pk[i]*8);cells.forEach((b,r)=>{const l=8-r;b.className=l<=on?'on':(l===p&&p>0?'pk':'')})})}
-function specStep(){
- const live=specLive&&!document.hidden;
- lv=lv.map((v,i)=>live?Math.max(.06,Math.min(1,v*.45+(.88-i*.04)*(.4+Math.random()*.7)*.55)):v*.8);
- pk=pk.map((p,i)=>Math.max(lv[i],p-.05));
- specDraw();
- if(!live&&pk.every(p=>p<.02)){clearInterval(specT);specT=0}
+function waveInit(){
+ const cv=$('#wave'),ctx=cv&&cv.getContext&&cv.getContext('2d');if(!ctx)return;
+ wv={cv,ctx,raf:0,last:0,t:Math.random()*60,env:.03,target:.03,next:0,ink:'',frames:0};
+ waveInk();
+ if(window.ResizeObserver)new ResizeObserver(waveSize).observe(cv);else addEventListener('resize',waveSize);
+ if(reduceMotion.addEventListener)reduceMotion.addEventListener('change',waveKick);else if(reduceMotion.addListener)reduceMotion.addListener(waveKick);
+ document.addEventListener('visibilitychange',waveKick);
+ waveSize();waveKick();
 }
-function specKick(){if(reduceMotion.matches){lv=lv.map((_,i)=>specLive?.3+.5*(1-i/16):0);pk=lv.slice();specDraw();return}if(!specT)specT=setInterval(specStep,140)}
-document.addEventListener('visibilitychange',specKick);
+function waveInk(){if(!wv)return;wv.ink=getComputedStyle(wv.cv).color||'#16240a';if(!wv.raf)waveDraw()}
+function waveSize(){
+ if(!wv)return;const r=wv.cv.getBoundingClientRect(),d=Math.min(3,window.devicePixelRatio||1);
+ const w=Math.round(r.width*d),h=Math.round(r.height*d);
+ if(w&&h&&(w!==wv.cv.width||h!==wv.cv.height)){wv.cv.width=w;wv.cv.height=h}
+ if(!wv.raf)waveDraw();
+}
+function waveY(x,layer){const t=wv.t,P=6.283185307;return Math.tanh(1.9*wv.env*(.5*Math.sin(P*1.15*x-2.4*t+layer*1.9)+.3*Math.sin(P*2.7*x+3.1*t+layer*.7)+.2*Math.sin(P*6.3*x-5.2*t+layer*2.6)))}
+function waveDraw(){
+ const{cv,ctx}=wv,W=cv.width,H=cv.height;if(W<4||H<4||!cv.clientWidth)return;
+ const k=W/cv.clientWidth,n=Math.max(28,Math.min(48,Math.round(cv.clientWidth/8))),A=wv.A&&wv.A.length===n+1?wv.A:(wv.A=new Float32Array(n+1)),B=wv.B&&wv.B.length===n+1?wv.B:(wv.B=new Float32Array(n+1));
+ for(let i=0;i<=n;i++){const x=i/n,w=Math.pow(Math.sin(Math.PI*x),1.1);A[i]=waveY(x,0)*w;B[i]=-waveY(x,2.4)*w*.9}
+ const mid=H/2,amp=H*.44;
+ ctx.clearRect(0,0,W,H);ctx.strokeStyle=wv.ink;ctx.lineJoin='miter';ctx.lineCap='butt';
+ /* nine threads woven between the two waves; threads at the same distance from the edges share one stroke */
+ for(let p=0;p<5;p++){const e=1-p/4;ctx.globalAlpha=.18+.82*e*e;ctx.lineWidth=(p?1.1:1.8)*k;ctx.beginPath();
+  for(const f of p===4?[.5]:[p/8,1-p/8]){const g=1-f,dx=W/n,Y=i=>mid-(A[i]*g+B[i]*f)*amp;let py=Y(0);ctx.moveTo(0,py);
+   for(let i=1;i<n;i++){const y=Y(i);ctx.quadraticCurveTo(i*dx,y,(i+.5)*dx,(y+Y(i+1))/2)}ctx.lineTo(W,Y(n))}
+  ctx.stroke()}
+ ctx.globalAlpha=1;wv.frames++;
+}
+const waveVisible=()=>!document.hidden&&!$('#vRadio').hidden;
+function waveStep(now){
+ wv.raf=0;if(!waveVisible()){wv.last=0;return}
+ if(wv.last&&now-wv.last<31){wv.raf=requestAnimationFrame(waveStep);return} /* 30 frames a second, as on the design canvas */
+ const dt=wv.last?Math.min(.1,(now-wv.last)/1000):0;wv.last=now;wv.t+=dt;
+ const m=waveMode;
+ if(m==='live'){if(wv.t>wv.next){wv.target=.38+Math.random()*.62;wv.next=wv.t+.22+Math.random()*.75}}else wv.target=m==='tune'?.16:.03;
+ wv.env+=(wv.target-wv.env)*Math.min(1,dt*(m==='live'?6:2.5));
+ waveDraw();
+ if(m==='idle'&&Math.abs(wv.env-wv.target)<.003){wv.last=0;return}
+ wv.raf=requestAnimationFrame(waveStep);
+}
+function waveKick(){
+ if(!wv)return;
+ if(reduceMotion.matches){if(wv.raf){cancelAnimationFrame(wv.raf);wv.raf=0}wv.last=0;wv.t=1.3;wv.env=waveMode==='live'?.55:waveMode==='tune'?.16:.03;waveDraw();return}
+ if(!waveVisible()){if(wv.raf){cancelAnimationFrame(wv.raf);wv.raf=0}wv.last=0;return}
+ if(!wv.raf)wv.raf=requestAnimationFrame(waveStep);
+}
+waveInit();
 
 /* ---------- SLEEP: stop after 15, 30, 60 or 90 minutes ---------- */
 const SLEEPS=[0,15,30,60,90];let sleepIdx=0,sleepEnd=0;
@@ -419,7 +456,7 @@ $('#kSleep').onclick=()=>{sleepIdx=(sleepIdx+1)%SLEEPS.length;const m=SLEEPS[sle
 
 /* ---------- LIGHT: green or amber backlight ---------- */
 function setLight(v,say){document.documentElement.dataset.light=v;store.set('light',v);
- $('#kLight').setAttribute('aria-label',`Backlight: ${v==='amber'?'amber':'green'}, tap to switch`);if(say)toast(v==='amber'?'Amber backlight':'Green backlight')}
+ $('#kLight').setAttribute('aria-label',`Backlight: ${v==='amber'?'amber':'green'}, tap to switch`);if(say)toast(v==='amber'?'Amber backlight':'Green backlight');waveInk()}
 setLight(store.get('light','lime')==='amber'?'amber':'lime');
 $('#kLight').onclick=()=>setLight(document.documentElement.dataset.light==='amber'?'lime':'amber',true);
 

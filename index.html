@@ -64,8 +64,8 @@ svg{display:block}
 .colon{display:flex;flex-direction:column;gap:20px}.colon b{width:8px;height:8px;border-radius:50%;background:var(--ink)}.colon.dim{opacity:.15}
 .ampm{font-size:20px;margin-bottom:2px}
 .sig i,.sig .eq{display:none}
-.spec{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;margin-top:8px}
-.spec div{display:flex;flex-direction:column;gap:2px}.spec b{height:6px;border-radius:1px;background:var(--ink);opacity:.1}.spec b.on{opacity:1}.spec b.pk{opacity:.8}
+.spec{position:relative;height:62px;margin-top:8px}
+.spec canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;color:var(--ink);will-change:transform}
 .tune{position:relative;height:32px;margin-top:8px;border-top:1px solid rgb(0 0 0/.22)}
 .tune svg{position:absolute;inset:0;width:100%;height:100%}
 .needle{position:absolute;top:3px;bottom:0;left:50%;width:3px;margin-left:-1.5px;border-radius:2px;background:#e8500c;box-shadow:0 0 6px rgb(232 80 12/.7);transition:left 1.2s cubic-bezier(.3,.7,.2,1),opacity .3s}
@@ -74,8 +74,10 @@ svg{display:block}
 /* nameplate, keys, presets */
 .prow{display:flex;align-items:center;gap:10px}
 .plate{border:0;padding:9px 15px;border-radius:11px;color:var(--orange);font:15px/1 Audiowide,'Chakra Petch',sans-serif;letter-spacing:.08em;background:linear-gradient(180deg,#27272b,#131315);text-shadow:0 0 8px rgb(255 122 26/.9),0 0 18px rgb(255 122 26/.5);
- box-shadow:inset 0 1px 0 rgb(255 255 255/.12),0 0 0 1.5px rgb(255 122 26/.6),0 0 18px rgb(255 122 26/.35),0 4px 0 #000;animation:plate 3.2s ease-in-out infinite}
-@keyframes plate{50%{box-shadow:inset 0 1px 0 rgb(255 255 255/.12),0 0 0 1.5px rgb(255 122 26/.9),0 0 28px rgb(255 122 26/.55),0 4px 0 #000}}
+ box-shadow:inset 0 1px 0 rgb(255 255 255/.12),0 0 0 1.5px rgb(255 122 26/.6),0 0 18px rgb(255 122 26/.35),0 4px 0 #000;position:relative;isolation:isolate}
+/* the stronger glow sits on its own layer and only fades, so the phone never repaints the plate */
+.plate::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 0 1.5px rgb(255 122 26/.95),0 0 28px rgb(255 122 26/.55);opacity:0;will-change:opacity;animation:plate 3.2s ease-in-out infinite}
+@keyframes plate{50%{opacity:1}}
 .plate:active{transform:translateY(2px)}
 .model{font:13px Audiowide,sans-serif;color:#d9d6cf}
 #kSearch{margin-left:auto}
@@ -171,8 +173,8 @@ html{height:100%}
 .fit .case{flex:1 1 auto;display:flex}
 .fit .lcd{flex:1;display:flex;flex-direction:column;justify-content:space-between}
 .fit.measure{min-height:0!important}.fit.measure .case{flex:none}
-.fit .spec{flex:1 1 auto;min-height:0}.fit .spec div{justify-content:flex-end}.fit .spec b{flex:1 1 0;min-height:5px;max-height:16px}
-.fit.measure .spec{flex:none}.fit.measure .spec b{flex:none;height:6px}
+.fit .spec{flex:1 1 auto;height:auto;min-height:54px;max-height:150px}
+.fit.measure .spec{flex:none;height:62px;min-height:0}
 .browse{display:flex;flex-direction:column}
 .bhead{flex:none;width:100%;max-width:1180px;margin:0 auto;padding:12px max(3vw,10px) 0}
 .scroller{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:2px max(3vw,10px) 18px}
@@ -215,7 +217,7 @@ html{height:100%}
     <div class="lr v"><span>Vol&nbsp;</span><span class="vols" id="vols"></span><span id="sleepTxt" style="margin-left:auto"></span></div>
     <div class="clock" aria-hidden="true"><div class="digits" id="digits"></div><span class="ampm" id="ampm"></span></div>
     <div class="lr"><span class="sig idle" id="nStatus" aria-live="polite"><i></i><span class="eq"><b></b><b></b><b></b><b></b></span><span class="t">Ready</span></span><span id="date"></span></div>
-    <div class="spec" id="spec" aria-hidden="true"></div>
+    <div class="spec" id="spec" aria-hidden="true"><canvas id="wave"></canvas></div>
     <div class="tune" aria-hidden="true"><svg id="dial"></svg><div class="needle lost" id="needle"></div></div>
    </div>
   </div>
@@ -317,6 +319,6 @@ html{height:100%}
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="app.js?v=20261126b"></script>
+<script src="app.js?v=20261126c"></script>
 </body>
 </html>
