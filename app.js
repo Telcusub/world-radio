@@ -33,7 +33,8 @@ let islMine=store.get('islMine',[]),islHide=new Set(store.get('islHide',[]));
 const norm=t=>String(t||'').toLowerCase().replace(/[\s'’`\-_.·,()]+/g,'');
 
 /* ---------- directory API (Radio Browser, with mirror fallback) ---------- */
-let servers=['de1.api.radio-browser.info','de2.api.radio-browser.info','fi1.api.radio-browser.info','nl1.api.radio-browser.info'].sort(()=>Math.random()-.5),si=0;
+const MIRRORS=['de1.api.radio-browser.info','de2.api.radio-browser.info','fi1.api.radio-browser.info','nl1.api.radio-browser.info'];
+let servers=[...MIRRORS].sort(()=>Math.random()-.5),si=0;
 const timed=(u,ms)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);return fetch(u,{signal:c.signal}).finally(()=>clearTimeout(t))};
 async function api(path){
  for(let i=0;i<servers.length;i++){const k=(si+i)%servers.length;
@@ -41,7 +42,7 @@ async function api(path){
  throw new Error('offline');
 }
 async function discover(){try{const r=await timed('https://all.api.radio-browser.info/json/servers',4000);const j=await r.json();
- const n=[...new Set(j.map(x=>x&&x.name).filter(x=>typeof x==='string'&&/^[\w.-]+$/.test(x)))];if(n.length){servers=n.sort(()=>Math.random()-.5);si=0}}catch(e){}}
+ const n=[...new Set(j.map(x=>x&&x.name).filter(x=>typeof x==='string'&&/^[\w.-]+$/.test(x)))];if(n.length){servers=[...n.sort(()=>Math.random()-.5),...MIRRORS.filter(h=>!n.includes(h))];si=0}}catch(e){}}
 
 /* ---------- helpers ---------- */
 const nm=s=>(s.name||'').trim()||'Unnamed station';
@@ -62,9 +63,13 @@ const setStatus=(t,k)=>{for(const el of[$('#nStatus'),$('#dStatus')]){el.classNa
 /* ---------- list rendering ---------- */
 const sub2=s=>s.about||(S.tab==='islamic'&&s.category?[s.category,...tagsOf(s)].join(' · '):tagsOf(s).join(', '));
 const row=(s,i)=>`<li class="st${S.cur&&S.cur.stationuuid===s.stationuuid?' on':''}" data-u="${esc(s.stationuuid)}"><button class="hit" data-i="${i}"><span class="logo" style="--h:hsl(${hue(s)} 46% 40%)">${logoIn(s)}</span><span class="tx"><b>${esc(nm(s))}</b><small>${esc(info(s))}</small>${sub2(s)?`<small class="tg">${esc(sub2(s))}</small>`:''}</span></button><button class="star${isFav(s)?' is':''}" data-f="${i}" aria-label="${isFav(s)?'Remove from':'Add to'} favorites">${I.star}</button></li>`;
-function describe(){const p=[];if(S.q)p.push(`“${S.q}”`);if(S.cc){const o=$('#cc').selectedOptions[0];p.push(o?o.textContent.replace(/\s*\([\d,.\s]+\)$/,''):S.cc)}if(S.lang)p.push(cap(S.lang));if(S.tag)p.push(cap(S.tag));return p.length?' for '+p.join(', '):''}
+let regions=null;try{regions=new Intl.DisplayNames(['en'],{type:'region'})}catch(e){}
+const ccName=c=>{const o=[...$('#cc').options].find(x=>x.value===c&&x.textContent!==c);return o?o.textContent.replace(/\s*\([\d,.\s]+\)$/,''):(regions&&regions.of(c))||c};
+const filt=()=>[S.cc&&ccName(S.cc),S.lang&&cap(S.lang),S.tag&&cap(S.tag)].filter(Boolean);
+function describe(){const p=[...(S.q?[`“${S.q}”`]:[]),...filt()];return p.length?' for '+p.join(', '):''}
 function countExplore(){
  if(S.busy&&!S.list.length)return count('Tuning in…');
+ if(S.wide&&S.list.length)return count(`Nothing called “${S.q}” in ${filt().join(', ')}, so here ${S.list.length===1?'is 1 station':`are ${fmt(S.list.length)} stations`} from everywhere${S.done?'':'. More load as you scroll'}`);
  if(!S.list.length){$('#count').innerHTML='No stations match that. <button class="lnk" id="clear" type="button">Clear search and filters</button>';return}
  count(`${fmt(S.list.length)} station${S.list.length===1?'':'s'}${describe()}${S.done?'':', more load as you scroll'}`);
 }
@@ -79,19 +84,20 @@ function islMeta(){
  const r=islView,all=islAll||[],q=$('#iq').value.trim(),on=r.length>0&&r.every(isFav);
  $('#starAll').textContent=on?'Unstar all':'Star all';$('#starAll').hidden=!r.length;
  if(!islAuto)return count(islErr?"Couldn't reach the radio directory. Check your connection, then open this tab again.":'Gathering Sunni Islamic stations…');
- else if(!r.length)count(q?'No Islamic stations match that filter.':'No Islamic stations found right now.');
+ else if(!r.length){if(q)$('#count').innerHTML=`No Islamic station matches “${esc(q)}”. <button class="lnk" id="allq" type="button">Search all stations</button>`;else count('No Islamic stations match that filter.')}
  else{const nc=new Set(all.map(x=>x.countrycode||'--')).size;count(`${q||islCat||islCC?`${fmt(r.length)} of `:''}${fmt(all.length)} Sunni Islamic stations from ${fmt(nc)} countries, A to Z · ${fmt(r.filter(isFav).length)} starred`)}
 }
-async function load(reset){
- if(reset){S.gen++;S.list=[];S.seen=new Set();S.offset=0;S.done=false;S.busy=false;if(S.tab==='explore'){$('#list').innerHTML='';$('#more').hidden=true}
-  if(S.q){const q=norm(S.q);for(const s of[...extra.add,...islMine]){if(S.seen.has(s.stationuuid)||!norm([s.name,s.aka].join(' ')).includes(q)||(S.cc&&s.countrycode!==S.cc))continue;S.seen.add(s.stationuuid);S.seen.add((s.url_resolved||s.url||'').replace(/\/+$/,''));S.list.push(s)}
+async function load(reset,wide){
+ if(reset){S.gen++;S.list=[];S.seen=new Set();S.offset=0;S.done=false;S.busy=false;S.wide=!!wide;if(S.tab==='explore'){$('#list').innerHTML='';$('#more').hidden=true}
+  if(S.q){const q=norm(S.q);for(const s of[...extra.add,...islMine]){if(S.seen.has(s.stationuuid)||!norm([s.name,s.aka].join(' ')).includes(q)||(S.cc&&!S.wide&&s.countrycode!==S.cc))continue;S.seen.add(s.stationuuid);S.seen.add((s.url_resolved||s.url||'').replace(/\/+$/,''));S.list.push(s)}
    if(S.list.length&&S.tab==='explore')$('#list').innerHTML=S.list.map(row).join('')}}
  if(S.busy||S.done)return;
  const g=S.gen;S.busy=true;if(S.tab==='explore'&&!S.list.length)count('Tuning in…');
  const p=new URLSearchParams({limit:LIM,offset:S.offset,hidebroken:'true',order:S.order,reverse:S.order==='name'?'false':'true'});
- if(S.q)p.set('name',S.q);if(S.cc)p.set('countrycode',S.cc);if(S.lang)p.set('language',S.lang);if(S.tag)p.set('tag',S.tag);if(S.secure)p.set('is_https','true');
+ if(S.q)p.set('name',S.q);if(!S.wide){if(S.cc)p.set('countrycode',S.cc);if(S.lang)p.set('language',S.lang);if(S.tag)p.set('tag',S.tag)}if(S.secure)p.set('is_https','true');
  try{
   const r=await api('stations/search?'+p);if(g!==S.gen)return;
+  if(!r.length&&!S.offset&&!S.list.length&&S.q&&!S.wide&&(S.cc||S.lang||S.tag)){S.busy=false;return load(true,true)}
   S.offset+=r.length;if(r.length<LIM)S.done=true;
   const add=r.filter(s=>{const k=(s.url_resolved||s.url||'').replace(/\/+$/,'');if(!s.stationuuid||S.seen.has(s.stationuuid)||S.seen.has(k))return false;S.seen.add(s.stationuuid);S.seen.add(k);return true}).map(slim);
   const at=S.list.length;S.list.push(...add);S.busy=false;
@@ -162,7 +168,7 @@ async function meta(){
 }
 function fill(id,all,items,val){const el=$('#'+id);el.innerHTML=`<option value="">${all}</option>`+items.map(([v,t,n])=>`<option value="${esc(v)}">${esc(t)} (${fmt(n)})</option>`).join('');setSel(el,val)}
 function setSel(el,v){if(v&&![...el.options].some(o=>o.value===v))el.insertAdjacentHTML('beforeend',`<option value="${esc(v)}">${esc(el.id==='cc'?v:cap(v))}</option>`);el.value=v||''}
-function markChips(){$$('.chip').forEach(b=>{const f=CHIPS[+b.dataset.c][1];b.classList.toggle('on',!S.q&&(f.cc||'')===S.cc&&(f.lang||'')===S.lang&&(f.tag||'')===S.tag)})}
+function markChips(){$$('#chips .chip').forEach(b=>{const f=CHIPS[+b.dataset.c][1],k=Object.keys(f)[0];b.classList.toggle('on',k?S[k]===f[k]:!S.q&&!S.cc&&!S.lang&&!S.tag)})}
 function sync(){filtBadge();$('#q').value=S.q;setSel($('#cc'),S.cc);setSel($('#lang'),S.lang);setSel($('#tag'),S.tag);$('#order').value=S.order;$('#secure').checked=S.secure;markChips()}
 const saveF=()=>{store.set('filters',{q:S.q,cc:S.cc,lang:S.lang,tag:S.tag,order:S.order,secure:S.secure});filtBadge()};
 function apply(f){S.q=f.q||'';S.cc=f.cc||'';S.lang=f.lang||'';S.tag=f.tag||'';sync();saveF();load(true)}
@@ -291,14 +297,16 @@ $('#resume').checked=store.get('resume',true);$('#resume').onchange=e=>{store.se
 $('#list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=rows();
  if(b.dataset.f!=null)return fav(r[+b.dataset.f]);
  if(b.dataset.i!=null){const i=+b.dataset.i,s=r[i];if(!s)return;if(S.cur&&S.cur.stationuuid===s.stationuuid&&S.want)return;if(S.cur&&S.cur.stationuuid===s.stationuuid)return toggle();play(s,r,i)}});
-$('#count').addEventListener('click',e=>{if(e.target.id==='clear')apply({})});
+$('#count').addEventListener('click',e=>{if(e.target.id==='clear')apply({});
+ if(e.target.id==='allq'){S.q=$('#iq').value.trim();sync();saveF();setView('explore');load(true)}});
 $('#form').addEventListener('submit',e=>{e.preventDefault();S.q=$('#q').value.trim();saveF();markChips();load(true);$('#q').blur()});
 $('#q').addEventListener('search',()=>{if(!$('#q').value&&S.q){S.q='';saveF();markChips();load(true)}});
 for(const k of['cc','lang','tag'])$('#'+k).addEventListener('change',e=>{S[k]=e.target.value;saveF();markChips();load(true)});
 $('#order').addEventListener('change',e=>{S.order=e.target.value;saveF();load(true)});
 $('#secure').addEventListener('change',e=>{S.secure=e.target.checked;saveF();load(true);refill();islAuto=null;islFrom='';buildIsl();loadIsl()});
 $('#chips').innerHTML=CHIPS.map(([l],i)=>`<button class="chip" type="button" data-c="${i}">${l}</button>`).join('');
-$('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)apply(CHIPS[+b.dataset.c][1])});
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;const f=CHIPS[+b.dataset.c][1],k=Object.keys(f)[0];
+ if(!k)return apply({});S[k]=S[k]===f[k]?'':f[k];sync();saveF();load(true)});
 const HASH={radio:'',explore:'explore',islamic:'islamic',favs:'favorites',recent:'recent'};
 function setView(v){
  if(!(v in HASH))v='radio';const changed=v!==view;view=v;store.set('view',v);
